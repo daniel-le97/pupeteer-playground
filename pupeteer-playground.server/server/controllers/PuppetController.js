@@ -1,24 +1,18 @@
-import fetch from 'node-fetch';
 import puppeteer from 'puppeteer';
+import { stlService } from '../services/SaveLocalService';
 import BaseController from '../utils/BaseController';
 import { logger } from '../utils/Logger';
 const fs = require('fs')
 
 
 
+// cleans urls
 function _cleanUrl(str){
-  return str.split('://')[1]
+  let staged = str.split('://')[1].split('.')
+  return staged[0] + '.' + staged[1]
 }
 
-async function _download(url,fileName, num) {
-  const response = await fetch(url);
-  if(response.statusText == 'OK'){
-    const buffer = await response.buffer();
-    fs.writeFile(`/Users/beast/Pictures/puppeteer/${fileName}image-${num}.png`, buffer, () => '');
-    return 1
-  }
-  return 0
-}
+
 export class PuppetController extends BaseController {
   constructor() {
     logger.log('puppet controller registered')
@@ -62,7 +56,7 @@ export class PuppetController extends BaseController {
 
     for (let i = 0; i < images.length; i++) {
       logger.log(images[i])
-      imageCount += await _download(images[i],_cleanUrl(url), i)
+      imageCount += await stlService.download(images[i],_cleanUrl(url), i)
     }
 
     await browser.close();

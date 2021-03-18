@@ -1,6 +1,5 @@
 <template>
   <header>
-    <Navbar />
   </header>
   <main>
     <router-view />

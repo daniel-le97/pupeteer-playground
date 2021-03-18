@@ -12,14 +12,14 @@ class SaveLocalService {
     if(response.statusText == 'OK'){
       const buffer = await response.buffer();
       // fs.writeFile(`/Users/beast/Pictures/puppeteer/${fileName}/image-${num}.png`, buffer, () => '');
-      await this.downloadMkdir(`/Users/beast/Pictures/puppeteer/${fileName}/image-${num}.png`, buffer)
+      await this.mkdir(`/Users/beast/Pictures/puppeteer/${fileName}/image-${num}.png`, buffer)
       logger.log()
       return 1
     }
     return 0
   }
 
-  async downloadMkdir(filename,content, charset) {
+  async mkdir(filename,content, charset) {
       // -- normalize path separator to '/' instead of path.sep,
       // -- as / works in node for Windows as well, and mixed \\ and / can appear in the path
       let filepath = filename.replace(/\\/g,'/');

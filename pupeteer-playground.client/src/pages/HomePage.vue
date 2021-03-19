@@ -7,6 +7,7 @@
             enter url
             <input v-model="state.url" class="w-100" type="text">
             <input v-model="state.filePath" class="w-100" type="text">
+            <input type="file" webkitdirectory directory>
             <div class="mb-3">
               enter file path
             </div>
@@ -51,7 +52,8 @@ export default {
 
 <style scoped lang="scss">
 input{
-  border-radius: 8px;
+  border-radius: 4px;
+  padding: .3rem;
   background: transparent;
   color: rgb(209, 209, 209);
   border: solid 1px rgb(209, 209, 209);
@@ -63,6 +65,6 @@ input{
 
 .bg-fade-dark{
   border-radius: 8px;
-  background: rgba(29, 29, 29, 0.382);
+  background:#1e1e1e80;
 }
 </style>

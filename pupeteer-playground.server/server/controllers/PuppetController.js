@@ -11,6 +11,12 @@ function _cleanUrl(str){
   let staged = str.split('://')[1].split('.')
   return staged[0] + '.' + staged[1]
 }
+function _cleanPath(str=''){
+  let out = ''
+  if(str[0] != '/') out += '/' + str
+  if(!str.endsWith('/')) out += '/'
+  return out
+}
 
 
 export class PuppetController extends BaseController {
@@ -20,12 +26,13 @@ export class PuppetController extends BaseController {
     this.router
       .put('', this.getSiteImage)
       .put('/scrape', this.scrapeImages)
+      // .put('/scrapefire', this.scrapeFire)
   }
 
   async getSiteImage(req, res, next){
     try {
       let url = req.body.url
-      let filePath = req.body.filePath
+      let filePath = _cleanPath(req.body.filePath)
       const browser = await puppeteer.launch({headless: false, defaultViewport: null,   args: [
         '--window-size=1920,1080',
       ]});
@@ -33,7 +40,7 @@ export class PuppetController extends BaseController {
       await page.goto(url);
       page.waitForTimeout(5000)
       await page.evaluate(() => document.body.style.background = 'transparent')
-      await page.screenshot({ path: '/Users/beast/Pictures/puppeteer/'+ _cleanUrl(url) +'.png', fullPage: true, omitBackground: true});
+      await page.screenshot({ path: filePath + _cleanUrl(url) +'.png', fullPage: true, omitBackground: true});
       await browser.close();
       res.send('screen shot of ' + url + ' taken')
     } catch (error) {
@@ -42,7 +49,7 @@ export class PuppetController extends BaseController {
   }
 
   async scrapeImages(req, res,next ){
-      let filePath = req.body.filePath
+      let filePath = _cleanPath(req.body.filePath)
       let url = req.body.url
       let imageCount = 0
       const browser = await puppeteer.launch({headless: false, defaultViewport: null,   args: [
@@ -56,12 +63,34 @@ export class PuppetController extends BaseController {
 
     for (let i = 0; i < images.length; i++) {
       logger.log(images[i])
-      imageCount += await stlService.download(images[i],_cleanUrl(url), i)
+      imageCount += await stlService.download(images[i],_cleanUrl(url), filePath, i)
     }
 
     await browser.close();
     res.send('downloaded ' + imageCount + ' images from '+ url)
   }
+
+//   async scrapeFire(req, res,next ){
+//     let filePath = req.body.filePath
+//     let url = req.body.url
+//     let imageCount = 0
+//     const browser = await puppeteer.launch({headless: true, defaultViewport: null,   args: [
+//     '--window-size=1920,1080',
+//   ]});
+//   const page = await browser.newPage();
+
+//   await page.goto(url);
+//   const images = await page.evaluate(() => Array.from(document.images, e => e.src));
+
+
+//   for (let i = 0; i < images.length; i++) {
+//     logger.log(images[i])
+//     imageCount += await fbsService.download(images[i],_cleanUrl(url), i)
+//   }
+
+//   await browser.close();
+//   res.send('downloaded ' + imageCount + ' images from '+ url)
+// }
 
 
 

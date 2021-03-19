@@ -7,12 +7,12 @@ const fs = require('fs')
 
 class SaveLocalService {
 
-  async download(url,fileName, num) {
+  async download(url,fileName,filePath, num) {
     const response = await fetch(url);
     if(response.statusText == 'OK'){
       const buffer = await response.buffer();
       // fs.writeFile(`/Users/beast/Pictures/puppeteer/${fileName}/image-${num}.png`, buffer, () => '');
-      await this.mkdir(`/Users/beast/Pictures/puppeteer/${fileName}/image-${num}.png`, buffer)
+      await this.mkdir(`${filePath}${fileName}/image-${num}.png`, buffer)
       logger.log()
       return 1
     }

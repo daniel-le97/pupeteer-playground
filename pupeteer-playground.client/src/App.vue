@@ -5,7 +5,7 @@
     <router-view />
   </main>
   <footer>
-    <div class="bg-dark text-light text-center p-4">
+    <div class="bg-transparent text-light text-center p-4">
       Made with 💖 by CodeWorks
     </div>
   </footer>
@@ -25,5 +25,10 @@ export default {
 </script>
 <style lang="scss">
 @import "./assets/scss/main.scss";
+#app{
+ background-image: url('./assets/img/Background-blur.png');
+ background-size: cover;
+ background-position: center;
 
+}
 </style>

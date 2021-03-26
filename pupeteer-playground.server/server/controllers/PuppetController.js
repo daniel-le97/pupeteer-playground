@@ -11,6 +11,10 @@ function _cleanUrl(str){
   let staged = str.split('://')[1].split('.')
   return staged[0] + '.' + staged[1]
 }
+function _urlCheck(str =''){
+  let out = str.startsWith('http://',0)
+  return out ? str : 'http://'+ str
+}
 function _cleanPath(str=''){
   let out = ''
   if(str[0] != '/') out += '/' + str
@@ -31,7 +35,7 @@ export class PuppetController extends BaseController {
 
   async getSiteImage(req, res, next){
     try {
-      let url = req.body.url
+      let url = _urlCheck(req.body.url)
       let filePath = _cleanPath(req.body.filePath)
       const browser = await puppeteer.launch({headless: false, defaultViewport: null,   args: [
         '--window-size=1920,1080',
@@ -49,49 +53,50 @@ export class PuppetController extends BaseController {
   }
 
   async scrapeImages(req, res,next ){
+    try {
       let filePath = _cleanPath(req.body.filePath)
-      let url = req.body.url
-      let imageCount = 0
-      const browser = await puppeteer.launch({headless: false, defaultViewport: null,   args: [
-      '--window-size=1920,1080',
-    ]});
-    const page = await browser.newPage();
+      let url = _urlCheck(req.body.url)
+      let imagesSaved = []
+      let imagesFailed = []
+        const browser = await puppeteer.launch({headless: true, defaultViewport: null,   args: [
+          '--window-size=1920,1080',
+        ]});
+        const page = await browser.newPage();
+        await page.goto(url);
+        await page.waitForTimeout(5000)
 
-    await page.goto(url);
-    const images = await page.evaluate(() => Array.from(document.images, e => e.src));
 
+        // Get images
+        const images = await page.evaluate(() => Array.from(document.images, e => e.src));
+        // Get Background images
+    const bgImages = await page.evaluate(()=>{
+      let elementNames = ["div", "body"] // Put all the tags you want bg images for here
+      let backgroundURLs = new Array();
+      elementNames.forEach( function(tagName) {
+        let tags = document.querySelectorAll(tagName);
+      for (let i = 0; i < tags.length; i++) {
+         let tag = getComputedStyle(tags[i]);
+         if (tag.background.match('url')) {
+           let bg = tag.background;
+             backgroundURLs.push(bg.substr(bg.indexOf("url") + 5, bg.lastIndexOf(")") - (bg.indexOf("url") + 6) ) );
+            }
+          }
+        });
+        return backgroundURLs
+      })
 
-    for (let i = 0; i < images.length; i++) {
-      logger.log(images[i])
-      imageCount += await stlService.download(images[i],_cleanUrl(url), filePath, i)
+      logger.log(images,bgImages)
+      let allImages = [...images, ...bgImages]
+      for (let i = 0; i < allImages.length; i++) {
+        let image = await stlService.download(allImages[i],_cleanUrl(url), filePath, i)
+        if(image.status == 'ok') {imagesSaved.push(image)}else{
+          imagesFailed.push(image)
+        }
     }
-
     await browser.close();
-    res.send('downloaded ' + imageCount + ' images from '+ url)
+    res.send({downloadedImages: imagesSaved, failedImages:imagesFailed})
+  } catch (error) {
+    next(error)
   }
-
-//   async scrapeFire(req, res,next ){
-//     let filePath = req.body.filePath
-//     let url = req.body.url
-//     let imageCount = 0
-//     const browser = await puppeteer.launch({headless: true, defaultViewport: null,   args: [
-//     '--window-size=1920,1080',
-//   ]});
-//   const page = await browser.newPage();
-
-//   await page.goto(url);
-//   const images = await page.evaluate(() => Array.from(document.images, e => e.src));
-
-
-//   for (let i = 0; i < images.length; i++) {
-//     logger.log(images[i])
-//     imageCount += await fbsService.download(images[i],_cleanUrl(url), i)
-//   }
-
-//   await browser.close();
-//   res.send('downloaded ' + imageCount + ' images from '+ url)
-// }
-
-
-
+  }
 }

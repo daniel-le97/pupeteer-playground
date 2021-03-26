@@ -1,13 +1,12 @@
 <template>
-  <div class="container-fluid home">
-    <div class="row justify-content-center h-100 align-items-center">
-      <div class="col-8">
-        <div class="row justify-content-center p-5 bg-fade-dark">
+  <div class="container-fluid home ">
+    <div class="row justify-content-center h-100 align-content-center">
+      <div class="col-8 content1">
+        <div class="row justify-content-center p-5 bg-fade-dark my-1 window">
           <div class="col-12 text-light">
             enter url
-            <input v-model="state.url" class="w-100" type="text">
-            <input v-model="state.filePath" class="w-100" type="text">
-            <input type="file" webkitdirectory directory>
+            <input v-model="state.search.url" class="w-100" type="text">
+            <input v-model="state.search.filePath" class="w-100" type="text">
             <div class="mb-3">
               enter file path
             </div>
@@ -20,25 +19,37 @@
           </div>
         </div>
       </div>
+      <transition name="compLoad">
+        <div class="col-8 content" v-if="state.mode == 'picture scrape'">
+          <Picture-Results />
+        </div>
+      </transition>
     </div>
   </div>
 </template>
 
 <script>
-import { reactive } from 'vue'
+import { computed, reactive } from 'vue'
 import { puppetService } from '../services/PuppetService'
+import { AppState } from '../AppState'
 export default {
   name: 'Home',
   setup() {
     const state = reactive({
-      url: '',
-      filePath: ''
+      search: {
+        url: '',
+        filePath: ''
+      },
+      mode: '',
+      pictures: computed(() => AppState.pictureResults)
+
     })
     function getScreenCap() {
-      puppetService.getScreenshot(state)
+      puppetService.getScreenshot(state.search)
     }
     function getScrape() {
-      puppetService.getScrape(state)
+      state.mode = 'picture scrape'
+      puppetService.getScrape(state.search)
     }
     return {
       state,
@@ -50,7 +61,7 @@ export default {
 
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 input{
   border-radius: 4px;
   padding: .3rem;
@@ -67,4 +78,21 @@ input{
   border-radius: 8px;
   background:#1e1e1e80;
 }
+
+.window{
+  transition: all .5s ease;
+}
+
+.compLoad-enter-active,
+.compLoad-leave-active {
+  transition: all 0.5s ease;
+}
+.compLoad-enter-from,
+.compLoad-leave-to {
+  opacity: 0;
+  transform: translateY(5px);
+}
+
+// animated flex
+
 </style>

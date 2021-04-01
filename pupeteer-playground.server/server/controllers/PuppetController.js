@@ -30,7 +30,6 @@ export class PuppetController extends BaseController {
     this.router
       .put('', this.getSiteImage)
       .put('/scrape', this.scrapeImages)
-      // .put('/scrapefire', this.scrapeFire)
   }
 
   async getSiteImage(req, res, next){

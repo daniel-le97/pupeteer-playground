@@ -1,8 +1,16 @@
 <template>
-  <div class="component row text-light justify-content-center p-5 bg-fade-dark">
-    <transition-group name="good">
-      <Picture-component v-for="(picture,i) in state.goodPictures" :key="i" :picture-data="picture" />
-    </transition-group>
+  <div class=" text-light p-5 bg-fade-dark">
+    <button class="btn btn-outlin-light" @click="resize">
+      resize
+    </button>
+    <div class="grid border-primary">
+      <Picture-component
+        class="item m-0"
+        v-for="(picture,i) in state.goodPictures"
+        :key="i"
+        :picture-data="picture"
+      />
+    </div>
     <div class=" col-12 text-light justify-content-center">
       <div class="row">
         <Picture-component v-for="picture in state.badPictures" :key="picture.url" :picture-data="picture" />
@@ -34,6 +42,7 @@
 <script>
 import { AppState } from '../AppState'
 import { computed, reactive, onMounted, watch, watchEffect } from 'vue'
+import { logger } from '../utils/Logger'
 export default {
   name: 'PictureResults',
   setup() {
@@ -45,22 +54,41 @@ export default {
 
     })
     watch(
-      () => state,
+      () => state.goodPictures,
       (state, prevState) => {
-        console.log(
-          'Watcher',
-          state.goodPictures,
-          prevState.goodPictures
-        )
+        logger.log('tried to draw grid')
+        resize()
       },
       { deep: true }
     )
-    return { state }
+    function resize() {
+      if (state.goodPictures !== undefined) {
+        const allItems = document.getElementsByClassName('item')
+        for (let i = 0; i < allItems.length; i++) {
+          const item = allItems[i]
+          logger.log(item.querySelector('.content'))
+          const grid = document.getElementsByClassName('grid')[0]
+          const rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'))
+          const rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-row-gap'))
+          const rowSpan = Math.ceil((item.querySelector('.content').getBoundingClientRect().height + rowGap) / (rowHeight + rowGap))
+          item.style.gridRowEnd = 'span ' + rowSpan
+          logger.log(rowSpan)
+        }
+      }
+    }
+    return { state, resize }
   }
 }
 </script>
 
 <style lang='scss' scoped>
+
+.grid{
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-auto-rows: 40px;
+}
 
 .component {
   transition: all 1s ease;

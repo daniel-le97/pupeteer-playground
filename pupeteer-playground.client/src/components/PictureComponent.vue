@@ -1,6 +1,6 @@
 <template>
-  <div class="pictureComponent col-3 p-3 border-light">
-    <img :src="state.picture.url" alt="" class="img-fluid img-hover">
+  <div class="pictureComponent p-3 border-light">
+    <img :src="state.picture.url" alt="" class="img-fluid content img-hover">
   </div>
 </template>
 

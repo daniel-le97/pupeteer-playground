@@ -1,15 +1,11 @@
 <template>
-  <div class=" text-light p-5 bg-fade-dark">
-    <button class="btn btn-outlin-light" @click="resize">
-      resize
-    </button>
-    <div class="grid border-primary">
-      <Picture-component
-        class="item m-0"
-        v-for="(picture,i) in state.goodPictures"
-        :key="i"
-        :picture-data="picture"
-      />
+  <div class=" text-light row p-5 bg-fade-dark">
+    <div class=" border-primary">
+      <Masonry :items="state.goodPictures">
+        <template #item="{item}">
+          <PictureComponent :picture-data="item" />
+        </template>
+      </Masonry>
     </div>
     <div class=" col-12 text-light justify-content-center">
       <div class="row">
@@ -35,7 +31,7 @@
       {{ state.error }}
       <i class="ml-2 fas fa-sad-tear    "></i>
     </div>
-    <!-- --------------------------------------------------------- -->
+  <!-- --------------------------------------------------------- -->
   </div>
 </template>
 
@@ -57,44 +53,32 @@ export default {
       () => state.goodPictures,
       (state, prevState) => {
         logger.log('tried to draw grid')
-        resize()
       },
       { deep: true }
     )
-    function resize() {
-      if (state.goodPictures !== undefined) {
-        const allItems = document.getElementsByClassName('item')
-        for (let i = 0; i < allItems.length; i++) {
-          const item = allItems[i]
-          logger.log(item.querySelector('.content'))
-          const grid = document.getElementsByClassName('grid')[0]
-          const rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'))
-          const rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-row-gap'))
-          const rowSpan = Math.ceil((item.querySelector('.content').getBoundingClientRect().height + rowGap) / (rowHeight + rowGap))
-          item.style.gridRowEnd = 'span ' + rowSpan
-          logger.log(rowSpan)
-        }
-      }
-    }
-    return { state, resize }
+    return { state }
   }
 }
 </script>
 
 <style lang='scss' scoped>
 
-.grid{
-  display: grid;
-  grid-gap: 10px;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  grid-auto-rows: 40px;
+.masonry-with-columns {
+  columns: 6 200px;
+  column-gap: 1rem;
+  div {
+    width: 150px;
+    color: white;
+    margin: 0 1rem 1rem 0;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    font-family: system-ui;
+    font-weight: 900;
+    font-size: 2rem;
+  }
 }
 
-.component {
-  transition: all 1s ease;
-  height: auto;
-  /* max-height: 300px; */
-}
 /* pictures fade in */
 .good-enter-active,
 .good-leave-active {

@@ -1,6 +1,6 @@
 <template>
-  <div class="pictureComponent p-3 border-light">
-    <img :src="state.picture.url" alt="" class="img-fluid content img-hover">
+  <div class="pictureComponent  p-2 border-light">
+    <img :src="state.picture.url" alt="" class=" rounded img-fluid img-hover">
   </div>
 </template>
 
@@ -25,7 +25,7 @@ export default {
   transition: all .3s ease;
 }
 .pictureComponent:hover img{
-    transform: scale(1.05);
+    transform: scale(1.03);
     z-index: +100;
 }
 

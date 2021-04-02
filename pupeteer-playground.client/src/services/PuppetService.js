@@ -2,6 +2,53 @@ import { AppState } from '../AppState'
 import { logger } from '../utils/Logger'
 import { api } from './AxiosService'
 
+const testPics = {
+  smallest: [
+    { url: 'https://thiscatdoesnotexist.com' },
+    { url: 'https://source.unsplash.com/800x900/?animals,cat' },
+    { url: 'https://source.unsplash.com/800x800/?animals,cat' }
+  ],
+  small: [
+    { url: 'https://thiscatdoesnotexist.com' },
+    { url: 'https://source.unsplash.com/800x900/?animals,cat' },
+    { url: 'https://source.unsplash.com/800x1000/?animals,cat' },
+    { url: 'https://source.unsplash.com/900x1000/?animals,cat' },
+    { url: 'https://source.unsplash.com/800x1000/?animals,cat' },
+    { url: 'https://source.unsplash.com/800x1000/?animals,cat' },
+    { url: 'https://source.unsplash.com/800x900/?animals,cat' },
+    { url: 'https://source.unsplash.com/600x1200/?animals,cat' },
+    { url: 'https://source.unsplash.com/600x1200/?animals,cat' },
+    { url: 'https://source.unsplash.com/500x500/?animals,cat' },
+    { url: 'https://source.unsplash.com/800x800/?animals,cat' }
+  ],
+  big: [
+    { url: 'https://thiscatdoesnotexist.com' },
+    { url: 'https://source.unsplash.com/800x900/?animals,cat' },
+    { url: 'https://source.unsplash.com/800x1000/?animals,cat' },
+    { url: 'https://source.unsplash.com/900x1000/?animals,cat' },
+    { url: 'https://source.unsplash.com/800x1000/?animals,cat' },
+    { url: 'https://source.unsplash.com/800x1000/?animals,cat' },
+    { url: 'https://source.unsplash.com/800x900/?animals,cat' },
+    { url: 'https://source.unsplash.com/600x1200/?animals,cat' },
+    { url: 'https://source.unsplash.com/600x1200/?animals,cat' },
+    { url: 'https://source.unsplash.com/500x500/?animals,cat' },
+    { url: 'https://source.unsplash.com/1000x1000/?animals,cat' },
+    { url: 'https://source.unsplash.com/800x1000/?animals,cat' },
+    { url: 'https://source.unsplash.com/800x1000/?animals,cat' },
+    { url: 'https://source.unsplash.com/900x1000/?animals,cat' },
+    { url: 'https://source.unsplash.com/800x1000/?animals,cat' },
+    { url: 'https://source.unsplash.com/800x1000/?animals,cat' },
+    { url: 'https://source.unsplash.com/800x1000/?animals,cat' },
+    { url: 'https://source.unsplash.com/550x700/?animals,cat' },
+    { url: 'https://source.unsplash.com/800x1000/?animals,cat' },
+    { url: 'https://source.unsplash.com/900x2000/?animals,cat' },
+    { url: 'https://source.unsplash.com/900x1000/?animals,cat' },
+    { url: 'https://source.unsplash.com/800x1000/?animals,cat' },
+    { url: 'https://source.unsplash.com/800x1000/?animals,cat' },
+    { url: 'https://source.unsplash.com/800x800/?animals,cat' }
+  ]
+}
+
 class PuppetService {
   async getScreenshot(url) {
     try {
@@ -12,10 +59,14 @@ class PuppetService {
     }
   }
 
+  testData(size) {
+    AppState.pictureResults.downloadedImages = testPics[size]
+  }
+
   async getScrape(url) {
     try {
       AppState.loading = true
-      logger.log(url)
+      logger.log('Getting images', url)
       AppState.pictureResults = {}
       AppState.pictureResults.downloadedImages = []
       AppState.pictureResults.failedImages = []

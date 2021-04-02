@@ -3,6 +3,15 @@
     <div class="row justify-content-center h-100 align-content-center">
       <div class="col-8 content1">
         <div class="row justify-content-center p-5 bg-fade-dark my-1 window">
+          <button @click="testData('big')" class="btn btn-outline-warning">
+            add test data big
+          </button>
+          <button @click="testData('small')" class="btn btn-outline-warning">
+            add test data small
+          </button>
+          <button @click="testData('smallest')" class="btn btn-outline-warning">
+            add test data small
+          </button>
           <div class="col-12 text-light">
             enter url
             <input v-model="state.search.url" class="w-100" type="text">
@@ -20,8 +29,8 @@
         </div>
       </div>
       <transition name="compLoad">
-        <div class="col-8 content" v-if="state.mode == 'picture scrape'">
-          <!-- <Picture-Results /> -->
+        <div class="col-12 content" v-if="state.mode == 'picture scrape'">
+          <Picture-Results />
         </div>
       </transition>
     </div>
@@ -54,7 +63,11 @@ export default {
     return {
       state,
       getScreenCap,
-      getScrape
+      getScrape,
+      testData(size) {
+        state.mode = 'picture scrape'
+        puppetService.testData(size)
+      }
     }
   }
 }

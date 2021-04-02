@@ -1,7 +1,7 @@
 <template>
-  <div class="masonry-with-flex">
-    <div v-for="(item,i) in items" :key="item" class="">
-      <slot :i="i" :item="item" />
+  <div class="masonry-with-columns">
+    <div v-for="(item,i) in items" :key="i" class="">
+      <slot name="item" :i="i" :item="item" />
     </div>
   </div>
 </template>
@@ -23,30 +23,19 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.masonry-with-flex {
-  column-count: 4;
-  column-gap:10px;
-  row-gap: 10px;
-  word-break: keep-all;
-  white-space:pre;
-  word-wrap:break-word;
-  padding: 100px;
-  div {
-    margin-bottom:10px ;
-    background: #EC985A;
-    color: white;
+.masonry-with-columns {
+  // display: flex;
+  // flex-wrap: wrap;
+  // flex-direction: column;
+  // max-height: 1000px;
+  columns: 200px!important;
+  column-gap: 1rem;
+  div, img {
+    float: left;
+    width: 100%;
+    margin: 0 1rem 1rem 0;
+    display: inline-block;
     text-align: center;
-    font-family: system-ui;
-    font-weight: 900;
-    font-size: 2rem;
-    word-
-  }
-  @for $i from 1 through 3 {
-    div:nth-child(#{$i}) {
-      $h: (random(400) + 100) + px;
-      min-height: $h;
-    }
-  }
-
+      }
 }
 </style>

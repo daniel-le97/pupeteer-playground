@@ -83,7 +83,8 @@ class PuppetService {
       logger.error('HAVE YOU STARTED YOUR SERVER YET???', err)
       AppState.loading = false
       if (err.message) {
-        AppState.pictureResults = { error: err.response.data.error.message.split(':')[2] }
+        const message = err.message.split(':')
+        AppState.pictureResults = { error: message[message.length - 1] }
       } else {
         AppState.pictureResults = { error: 'unknown error, please try again' }
       }

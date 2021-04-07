@@ -24,10 +24,6 @@ export default {
 
 <style lang='scss' scoped>
 .masonry-with-columns {
-  // display: flex;
-  // flex-wrap: wrap;
-  // flex-direction: column;
-  // max-height: 1000px;
   columns: 200px!important;
   column-gap: 1rem;
   div, img {

@@ -29,7 +29,7 @@
         </div>
       </div>
       <transition name="compLoad">
-        <div class="col-12 content" v-if="state.mode == 'picture scrape'">
+        <div class="col-8 content" v-if="state.mode == 'picture scrape'">
           <Picture-Results />
         </div>
       </transition>

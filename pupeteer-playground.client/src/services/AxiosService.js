@@ -3,7 +3,7 @@ import Axios from 'axios'
 export const baseURL = window.location.origin.includes('localhost') ? 'http://localhost:3000' : ''
 export const api = Axios.create({
   baseURL,
-  timeout: 50000
+  timeout: 3600000
 })
 
 export const setBearer = function(bearer) {

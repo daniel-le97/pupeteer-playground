@@ -8,5 +8,6 @@ export const AppState = reactive({
     downloadedImages: [],
     failedPictures: []
   },
-  loading: false
+  loading: false,
+  socketRoom: ''
 })

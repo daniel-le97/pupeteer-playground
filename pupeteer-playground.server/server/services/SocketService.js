@@ -80,7 +80,7 @@ class SocketService {
     // Handshake / Confirmation of Connection
     socket.emit('connected', {
       socket: socket.id,
-      message: 'Successfully Connected'
+      message: 'Successfully Connected, let the villainy commence...'
     })
   }
 }

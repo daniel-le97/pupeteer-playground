@@ -1,6 +1,6 @@
-import { logger } from './Logger'
 import io from 'socket.io-client'
 import { baseURL } from '../services/AxiosService'
+import { logger } from './Logger'
 export class SocketHandler {
   /**
    * @param {String} url
@@ -39,10 +39,10 @@ export class SocketHandler {
   }
 
   emit(action, payload = undefined) {
-    if (!this.authenticated) {
-      logger.log('[ENQUEING_ACTION]', { action, payload })
-      return this.queue.push({ action, payload })
-    }
+    // if (!this.authenticated) {
+    //   logger.log('[ENQUEING_ACTION]', { action, payload })
+    //   return this.queue.push({ action, payload })
+    // }
     this.socket.emit(action, payload)
   }
 }

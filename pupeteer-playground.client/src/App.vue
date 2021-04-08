@@ -13,11 +13,13 @@
 </template>
 
 <script>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { AppState } from './AppState'
+import { socketService } from './services/SocketService'
 export default {
   name: 'App',
   setup() {
+    onMounted(() => socketService.getSocketRoom())
     return {
       appState: computed(() => AppState)
     }

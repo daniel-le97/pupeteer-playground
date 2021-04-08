@@ -2,8 +2,9 @@ import { initialize } from '@bcwdev/auth0provider-client'
 import { AppState } from '../AppState'
 import { audience, clientId, domain } from '../AuthConfig'
 import router from '../router'
-import { setBearer } from './AxiosService'
 import { accountService } from './AccountService'
+import { setBearer } from './AxiosService'
+import { socketService } from './SocketService'
 
 export const AuthService = initialize({
   domain,
@@ -20,7 +21,8 @@ export const AuthService = initialize({
 
 AuthService.on(AuthService.AUTH_EVENTS.AUTHENTICATED, async function() {
   setBearer(AuthService.bearer)
-  await accountService.getAccount()
+  const user = await accountService.getAccount()
   AppState.user = AuthService.user
+  socketService.authenticate(AuthService.bearer)
   // NOTE if there is something you want to do once the user is authenticated, place that here
 })

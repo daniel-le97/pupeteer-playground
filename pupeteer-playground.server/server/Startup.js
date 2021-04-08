@@ -1,3 +1,4 @@
+import { Auth0Provider } from '@bcwdev/auth0provider'
 import bp from 'body-parser'
 import cors from 'cors'
 import express from 'express'
@@ -8,7 +9,7 @@ import { logger } from './utils/Logger'
 export default class Startup {
   static ConfigureGlobalMiddleware(app) {
     // NOTE Configure and Register Middleware
-    const whitelist = ['http://localhost:8080']
+    const whitelist = ['http://localhost:8080','http://localhost:8081']
     const corsOptions = {
       origin: function(origin, callback) {
         const originIsWhitelisted = whitelist.indexOf(origin) !== -1
@@ -23,11 +24,11 @@ export default class Startup {
     app.use(bp.json({ limit: '50mb' }))
 
     // NOTE Configures auth0 middleware that is used throughout controllers
-    // Auth0Provider.configure({
-    //   domain: process.env.AUTH_DOMAIN,
-    //   clientId: process.env.AUTH_CLIENT_ID,
-    //   audience: process.env.AUTH_AUDIENCE
-    // })
+    Auth0Provider.configure({
+      domain: process.env.AUTH_DOMAIN,
+      clientId: process.env.AUTH_CLIENT_ID,
+      audience: process.env.AUTH_AUDIENCE
+    })
   }
 
   static ConfigureRoutes(app) {

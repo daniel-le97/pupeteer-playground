@@ -39,10 +39,10 @@ export class SocketHandler {
   }
 
   emit(action, payload = undefined) {
-    // if (!this.authenticated) {
-    //   logger.log('[ENQUEING_ACTION]', { action, payload })
-    //   return this.queue.push({ action, payload })
-    // }
+    if (!this.authenticated) {
+      logger.log('[ENQUEING_ACTION]', { action, payload })
+      return this.queue.push({ action, payload })
+    }
     this.socket.emit(action, payload)
   }
 }

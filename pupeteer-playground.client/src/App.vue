@@ -19,7 +19,9 @@ import { socketService } from './services/SocketService'
 export default {
   name: 'App',
   setup() {
-    onMounted(() => socketService.getSocketRoom())
+    onMounted(async() => {
+      await socketService.getSocketRoom()
+    })
     return {
       appState: computed(() => AppState)
     }

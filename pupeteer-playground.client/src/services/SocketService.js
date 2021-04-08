@@ -15,8 +15,10 @@ class SocketService extends SocketHandler {
   }
 
   getSocketRoom() {
-    AppState.socketRoom = catNameGenerator() + generateId()
-    this.socket.emit('join:room', AppState.socketRoom)
+    AppState.socketUser = catNameGenerator()
+    AppState.socketRoom = AppState.socketUser + ':' + generateId()
+    this.authenticate(AppState.socketRoom)
+    this.emit('join:room', AppState.socketRoom)
   }
 
   authenticate(bearerToken) {
@@ -28,7 +30,7 @@ class SocketService extends SocketHandler {
   }
 
   joinedRoom(payload) {
-    logger.log('your socket room is ', AppState.socketRoom)
+    logger.log('your socket room is ', payload)
   }
 
   connected(payload) {

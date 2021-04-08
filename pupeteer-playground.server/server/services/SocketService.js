@@ -22,16 +22,28 @@ class SocketService {
    * @param {SocketIO.Socket} socket
    */
   async authenticate(socket, bearerToken) {
+    const user = await Auth0Provider.getUserInfoFromBearerToken(bearerToken).catch(err => logger.log(err))
     try {
-      const user = await Auth0Provider.getUserInfoFromBearerToken(bearerToken)
-      const profile = await accountService.getAccount(user)
-      const limitedProfile = {
-        id: profile.id,
-        email: profile.email,
-        picture: profile.picture
+      let limitedProfile ={}
+      if(user != null){
+        const profile = await accountService.getAccount(user)
+         limitedProfile = {
+          id: profile.id,
+          email: profile.email,
+          picture: profile.picture
+        }
+        await attachHandlers(this.io, socket, user, limitedProfile)
+        socket.join(user.id)
+      } else{
+        let user = bearerToken.split(':')
+         limitedProfile ={
+           id:user[1],
+           email: user[0],
+          picture: 'https://thiscatdoesnotexist.com'
+         }
+         await attachHandlers(this.io, socket, user, limitedProfile)
+         socket.join(user)
       }
-      await attachHandlers(this.io, socket, user, limitedProfile)
-      socket.join(user.id)
       socket.emit('authenticated', limitedProfile)
       this.io.emit('UserConnected', user.id)
     } catch (e) {

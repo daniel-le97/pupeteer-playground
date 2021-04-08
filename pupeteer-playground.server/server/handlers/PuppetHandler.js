@@ -1,4 +1,3 @@
-import { logger } from '../utils/Logger'
 import { SocketHandler } from '../utils/SocketHandler'
 
 export class PuppetHandler extends SocketHandler {
@@ -8,8 +7,7 @@ export class PuppetHandler extends SocketHandler {
    * @param {{ id: string; email: string; }} user
    * @param {{ id: string; email: string; }} profile
    */
-  constructor(io, socket, user, profile) {
-    logger.log("puppet handler registered")
+  constructor(io, socket, user=null, profile=null) {
     super(io, socket, user, profile)
     this
       .on('TEST_EVENT', this.testEvent)

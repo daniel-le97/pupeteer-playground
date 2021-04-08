@@ -1,7 +1,6 @@
 import { AppState } from '../AppState'
 import { logger } from '../utils/Logger'
 import { api } from './AxiosService'
-import { socketService } from './SocketService'
 
 const testPics = {
   smallest: [
@@ -66,7 +65,6 @@ class PuppetService {
 
   async getScrape(url) {
     try {
-      socketService.emit('join:room', AppState.socketRoom)
       AppState.loading = true
       logger.log('Getting images', url)
       AppState.pictureResults = {}

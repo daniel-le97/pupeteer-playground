@@ -3,6 +3,7 @@ import { catNameGenerator, generateId } from '../utils/Generators'
 import { logger } from '../utils/Logger'
 import { SocketHandler } from '../utils/SocketHandler'
 import { puppetService } from './PuppetService'
+import { queService } from './QueService'
 
 class SocketService extends SocketHandler {
   // register listeners for the room messages/emits that come from the server
@@ -12,6 +13,7 @@ class SocketService extends SocketHandler {
       .on('joined:room', this.joinedRoom)
       .on('download:image', this.downloadImage)
       .on('found:image', this.foundImage)
+      .on('action:done', this.nextAction)
   }
 
   getSocketRoom() {
@@ -27,6 +29,10 @@ class SocketService extends SocketHandler {
 
   foundImage(payload) {
     puppetService.foundImage(payload)
+  }
+
+  nextAction() {
+    queService.nextAction()
   }
 
   authenticate(bearerToken) {

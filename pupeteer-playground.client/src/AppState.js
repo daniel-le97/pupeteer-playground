@@ -4,11 +4,15 @@ import { reactive } from 'vue'
 export const AppState = reactive({
   user: {},
   account: {},
-  pictureResults: {
+  imageResults: {
     downloadedImages: [],
-    failedPictures: []
+    failedImages: [],
+    message: null,
+    error: null,
+    found: 0
   },
-  loading: false,
+  loading: 0,
+  actionQue: [],
   socketUser: '',
   socketRoom: ''
 })

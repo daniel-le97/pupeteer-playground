@@ -19,6 +19,22 @@
             <div class="mb-3">
               enter file path
             </div>
+            <div class="col-12 mb-3">
+              <div class="row justify-items-center">
+                <small class="col text-center">
+                  <input type="checkbox" class="form-check-input" :checked="state.options.scrapeImages" @change="state.options.scrapeImages = !state.options.scrapeImages">
+                  <label class="form-check-label" for="exampleCheck1">image tags</label>
+                </small>
+                <small class="col text-center">
+                  <input type="checkbox" class="form-check-input" :checked="state.options.scrapeBackgrounds" @change="state.options.scrapeBackgrounds = !state.options.scrapeBackgrounds">
+                  <label class="form-check-label" for="exampleCheck1">background images</label>
+                </small>
+                <small class="col text-center">
+                  <input type="checkbox" class="form-check-input" :checked="state.options.scrapeThumbnails" @change="state.options.scrapeThumbnails = !state.options.scrapeThumbnails">
+                  <label class="form-check-label" for="exampleCheck1">thumbnails</label>
+                </small>
+              </div>
+            </div>
             <button class="btn btn-outline-light col-6" @click="getScreenCap">
               get site cap
             </button>
@@ -40,14 +56,17 @@
 <script>
 import { computed, reactive } from 'vue'
 import { puppetService } from '../services/PuppetService'
+import { queService } from '../services/QueService'
 import { AppState } from '../AppState'
 export default {
   name: 'Home',
   setup() {
     const state = reactive({
+      options: { scrapeImages: true, scrapeBackgrounds: false, scrapeThumbnails: false },
       search: {
         url: '',
-        filePath: ''
+        filePath: '',
+        socketRoom: computed(() => AppState.socketRoom)
       },
       mode: '',
       pictures: computed(() => AppState.pictureResults)
@@ -57,8 +76,18 @@ export default {
       puppetService.getScreenshot(state.search)
     }
     function getScrape() {
-      state.mode = 'picture scrape'
-      puppetService.getScrape(state.search)
+      for (const key in state.options) {
+        if (state.options[key]) {
+          state.mode = 'picture scrape'
+          const payload = {
+            service: 'puppetService',
+            action: key,
+            search: state.search
+          }
+          queService.addAction(payload)
+        }
+      }
+      queService.nextAction()
     }
     return {
       state,

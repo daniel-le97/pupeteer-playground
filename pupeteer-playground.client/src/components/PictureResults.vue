@@ -13,7 +13,7 @@
       </div>
     </div>
     <!-- NOTE this section needs to be cut out into a component -->
-    <div v-if="state.loading" class="col-12">
+    <div v-if="state.loading > 0 " class="col-12">
       <div class="row align-items-center">
         <div class="col-8">
           <div v-if="!state.message">
@@ -24,6 +24,7 @@
           </div>
         </div>
         <div class="col">
+          <!-- Loading triangle -->
           <div class="loader triangle">
             <svg viewBox="0 0 86 80">
               <polygon points="43 8 79 72 7 72"></polygon>
@@ -48,20 +49,14 @@ export default {
   name: 'PictureResults',
   setup() {
     const state = reactive({
-      goodPictures: computed(() => AppState.pictureResults.downloadedImages),
-      badPictures: computed(() => AppState.pictureResults.failedImages),
-      message: computed(() => AppState.pictureResults.message),
-      error: computed(() => AppState.pictureResults.error),
-      loading: computed(() => AppState.loading)
+      goodPictures: computed(() => AppState.imageResults.downloadedImages),
+      badPictures: computed(() => AppState.imageResults.failedImages),
+      message: computed(() => AppState.imageResults.message),
+      error: computed(() => AppState.imageResults.error),
+      loading: computed(() => AppState.loading),
+      imgsFound: computed(() => AppState.imageResults.found)
 
     })
-    watch(
-      () => state.goodPictures,
-      (state, prevState) => {
-        logger.log('tried to draw grid')
-      },
-      { deep: true }
-    )
     return { state }
   }
 }

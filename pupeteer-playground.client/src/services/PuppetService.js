@@ -50,6 +50,12 @@ const testPics = {
 }
 
 class PuppetService {
+  scrapeHandler(options) {
+    this.scrapeImages(options)
+    this.scrapeBackgrounds(options)
+    this.scrapeThumbnails(options)
+  }
+
   async getScreenshot(url) {
     try {
       const res = await api.put('/api/puppet', url)
@@ -60,40 +66,98 @@ class PuppetService {
   }
 
   testData(size) {
-    AppState.pictureResults.downloadedImages = testPics[size]
+    AppState.imageResults.downloadedImages = testPics[size]
   }
 
   async getScrape(url) {
     try {
       AppState.loading = true
-      AppState.pictureResults = {}
-      AppState.pictureResults.downloadedImages = []
-      AppState.pictureResults.failedImages = []
+      AppState.imageResults.downloadedImages = []
+      AppState.imageResults.failedImages = []
       url.socketRoom = AppState.socketRoom
       logger.log('Getting images', url)
       const res = await api.put('/api/puppet/scrape', url)
       logger.log(res.data)
-      AppState.pictureResults.message = res.data.message
+      AppState.imageResults.message = res.data.message
       AppState.loading = false
     } catch (err) {
       logger.error('HAVE YOU STARTED YOUR SERVER YET???', err)
       AppState.loading = false
       if (err.message) {
         const message = err.message.split(':')
-        AppState.pictureResults.error = { error: message[message.length - 1] }
+        AppState.imageResults.error = { error: message[message.length - 1] }
       } else {
-        AppState.pictureResults.error = { error: 'unknown error, please try again' }
+        AppState.imageResults.error = { error: 'unknown error, please try again' }
+      }
+    }
+  }
+
+  async scrapeImages(search) {
+    try {
+      const res = await api.put('api/puppet/scrape/images', search)
+      AppState.imageResults.message = res.data.message
+      AppState.imageResults.found += res.data.count
+      AppState.loading -= 1
+    } catch (err) {
+      logger.error(err)
+      AppState.loading -= 1
+      if (err.message) {
+        const message = err.message.split(':')
+        AppState.imageResults.error = { error: message[message.length - 1] }
+      } else {
+        AppState.imageResults.error = { error: 'unknown error, please try again' }
+      }
+    }
+  }
+
+  async scrapeBackgrounds(search) {
+    try {
+      const res = await api.put('api/puppet/scrape/backgrounds', search)
+      AppState.imageResults.message = res.data.message
+      AppState.imageResults.found += res.data.count
+      AppState.loading -= 1
+    } catch (err) {
+      logger.error(err)
+      AppState.loading -= 1
+      if (err.message) {
+        const message = err.message.split(':')
+        AppState.imageResults.error = { error: message[message.length - 1] }
+      } else {
+        AppState.imageResults.error = { error: 'unknown error, please try again' }
+      }
+    }
+  }
+
+  async scrapeThumbnails(search) {
+    try {
+      const res = await api.put('api/puppet/scrape/thumbnails', search)
+      AppState.imageResults.message = res.data.message
+      AppState.imageResults.found += res.data.count
+      AppState.loading -= 1
+    } catch (err) {
+      logger.error(err)
+      AppState.loading -= 1
+      if (err.message) {
+        const message = err.message.split(':')
+        AppState.imageResults.error = { error: message[message.length - 1] }
+      } else {
+        AppState.imageResults.error = { error: 'unknown error, please try again' }
       }
     }
   }
 
   foundImage(image) {
     logger.log(image)
-    AppState.pictureResults.foundImages.push(image)
+    AppState.imageResults.foundImages.push(image)
   }
 
   downloadImage(image) {
-    logger.log(image)
+    // logger.log(image)
+    switch (image.status) {
+      case 'ok': AppState.imageResults.downloadedImages.push(image); break
+      case 'bad': AppState.imageResults.downloadedImages.push(image); break
+    }
+    AppState.imageResults.found--
   }
 }
 

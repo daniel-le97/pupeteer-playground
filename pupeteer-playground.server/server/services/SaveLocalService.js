@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import { logger } from "../utils/Logger";
 const fs = require('fs')
 // Private Methods
 
@@ -11,18 +12,20 @@ class SaveLocalService {
       url: url,
       status: 'bad'
     }
+    logger.log('downloading', url)
     const response = await fetch(url);
     if(response.statusText == 'OK'){
       // buffer is the image data as a giant array
       const buffer = await response.buffer();
-      // fs.writeFile(`/Users/beast/Pictures/puppeteer/${fileName}/image-${num}.png`, buffer, () => '');
+      // await this.mkdir(`/Users/beast/Pictures/puppeteer/${fileName}/image-${num}.png`, buffer, () => '');
       await this.mkdir(`${filePath}${fileName}/image-${num}.png`, buffer)
       imagePackage.status = 'ok'
     }
     return imagePackage
   }
 
-  async mkdir(filename,content, charset) {
+
+  async mkdir(filename,content) {
       //  normalize path separator to '/' instead of path.sep,
       //  as / works in node for Windows as well, and mixed \\ and / can appear in the path
       let filepath = filename.replace(/\\/g,'/');

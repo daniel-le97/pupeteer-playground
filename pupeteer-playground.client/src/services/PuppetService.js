@@ -89,8 +89,7 @@ class PuppetService {
 
   foundImage(image) {
     logger.log(image)
-      AppState.pictureResults.foundImages.push(image)
-    }
+    AppState.pictureResults.foundImages.push(image)
   }
 
   downloadImage(image) {

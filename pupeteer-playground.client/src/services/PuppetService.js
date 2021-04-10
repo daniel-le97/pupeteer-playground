@@ -66,29 +66,35 @@ class PuppetService {
   async getScrape(url) {
     try {
       AppState.loading = true
-      logger.log('Getting images', url)
       AppState.pictureResults = {}
       AppState.pictureResults.downloadedImages = []
       AppState.pictureResults.failedImages = []
+      url.socketRoom = AppState.socketRoom
+      logger.log('Getting images', url)
       const res = await api.put('/api/puppet/scrape', url)
       logger.log(res.data)
-      res.data.downloadedImages.forEach(image => {
-        AppState.pictureResults.downloadedImages.push(image)
-      })
-      res.data.failedImages.forEach(image => {
-        AppState.pictureResults.failedImages.push(image)
-      })
+      AppState.pictureResults.message = res.data.message
       AppState.loading = false
     } catch (err) {
       logger.error('HAVE YOU STARTED YOUR SERVER YET???', err)
       AppState.loading = false
       if (err.message) {
         const message = err.message.split(':')
-        AppState.pictureResults = { error: message[message.length - 1] }
+        AppState.pictureResults.error = { error: message[message.length - 1] }
       } else {
-        AppState.pictureResults = { error: 'unknown error, please try again' }
+        AppState.pictureResults.error = { error: 'unknown error, please try again' }
       }
     }
+  }
+
+  foundImage(image) {
+    logger.log(image)
+      AppState.pictureResults.foundImages.push(image)
+    }
+  }
+
+  downloadImage(image) {
+    logger.log(image)
   }
 }
 

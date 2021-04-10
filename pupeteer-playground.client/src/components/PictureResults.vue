@@ -16,7 +16,12 @@
     <div v-if="state.loading" class="col-12">
       <div class="row align-items-center">
         <div class="col-8">
-          Getting your pictures now. This could take a minute...
+          <div v-if="!state.message">
+            Getting your pictures now. This could take a minute...
+          </div>
+          <div v-else>
+            {{ state.message }}
+          </div>
         </div>
         <div class="col">
           <div class="loader triangle">
@@ -45,6 +50,7 @@ export default {
     const state = reactive({
       goodPictures: computed(() => AppState.pictureResults.downloadedImages),
       badPictures: computed(() => AppState.pictureResults.failedImages),
+      message: computed(() => AppState.pictureResults.message),
       error: computed(() => AppState.pictureResults.error),
       loading: computed(() => AppState.loading)
 

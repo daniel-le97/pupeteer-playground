@@ -1,5 +1,6 @@
 import puppeteer from 'puppeteer';
 import { stlService } from '../services/SaveLocalService';
+import socketService from '../services/SocketService';
 import BaseController from '../utils/BaseController';
 import { logger } from '../utils/Logger';
 const fs = require('fs')
@@ -56,6 +57,7 @@ export class PuppetController extends BaseController {
     try {
       let filePath = _cleanPath(req.body.filePath)
       let url = _urlCheck(req.body.url)
+      let socketRoom = req.body.socketRoom
       let imagesSaved = []
       let imagesFailed = []
         const browser = await puppeteer.launch({headless: true, defaultViewport: null,   args: [
@@ -78,13 +80,14 @@ export class PuppetController extends BaseController {
       await page.evaluate(() => {
         return Promise.resolve(window.scrollTo(0,document.body.scrollHeight));
     });
-      await page.waitForTimeout(5000)
+      await page.waitForTimeout(2000)
       // logger.log("rtImages",rtImages)
 
         // Get images
         const images = await page.evaluate(() => Array.from(document.images, e =>  e.src));
         // logger.log("srcImages",images)
-        // Get Background images
+        images.forEach(i => socketService.messageRoom(socketRoom, 'found:image', i))
+        //SECTION Get Background images
     const bgImages = await page.evaluate(()=>{
       let elementNames = ["div", "body"] // Put all the tags you want bg images for here
       let backgroundURLs = new Array();
@@ -101,7 +104,7 @@ export class PuppetController extends BaseController {
         return backgroundURLs
       })
 
-// Get Images from links (thumbnail grab)
+//SECTION Get Images from links (thumbnail grab)
 let imageLinks = await page.evaluate(()=> {
   let tags = new Array()
   document.querySelectorAll('a').forEach(a => tags.push(a))

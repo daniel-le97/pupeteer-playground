@@ -26,7 +26,7 @@ class SocketService {
     try {
       let limitedProfile ={}
       if(user != null){
-        const profile = await accountService.getAccount(user)
+        const profile = await accountService.getAccount(user).catch(err => logger.log(err))
          limitedProfile = {
           id: profile.id,
           email: profile.email,
@@ -34,18 +34,19 @@ class SocketService {
         }
         await attachHandlers(this.io, socket, user, limitedProfile)
         socket.join(user.id)
-      } else{
+         this.io.emit('UserConnected', user)
+        } else{
         let user = bearerToken.split(':')
          limitedProfile ={
            id:user[1],
            email: user[0],
           picture: 'https://thiscatdoesnotexist.com'
-         }
-         await attachHandlers(this.io, socket, user, limitedProfile)
-         socket.join(user)
+        }
+        await attachHandlers(this.io, socket, user, limitedProfile)
+        socket.join(user)
+        this.io.emit('UserConnected', user.id)
       }
       socket.emit('authenticated', limitedProfile)
-      this.io.emit('UserConnected', user.id)
     } catch (e) {
       socket.emit('error', e)
     }

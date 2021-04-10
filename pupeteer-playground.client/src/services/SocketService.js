@@ -2,16 +2,16 @@ import { AppState } from '../AppState'
 import { catNameGenerator, generateId } from '../utils/Generators'
 import { logger } from '../utils/Logger'
 import { SocketHandler } from '../utils/SocketHandler'
+import { puppetService } from './PuppetService'
 
 class SocketService extends SocketHandler {
   // register listeners for the room messages/emits that come from the server
   constructor() {
     super()
     this
-      .on('create:post', this.createPost)
-      .on('remove:post', this.removePost)
-      .on('update:post', this.updatePost)
       .on('joined:room', this.joinedRoom)
+      .on('download:image', this.downloadImage)
+      .on('found:image', this.foundImage)
   }
 
   getSocketRoom() {
@@ -19,6 +19,14 @@ class SocketService extends SocketHandler {
     AppState.socketRoom = AppState.socketUser + ':' + generateId()
     this.authenticate(AppState.socketRoom)
     this.emit('join:room', AppState.socketRoom)
+  }
+
+  downloadImage(payload) {
+    puppetService.downloadImage(payload)
+  }
+
+  foundImage(payload) {
+    puppetService.foundImage(payload)
   }
 
   authenticate(bearerToken) {
@@ -35,21 +43,6 @@ class SocketService extends SocketHandler {
 
   connected(payload) {
     console.log(payload.message)
-  }
-
-  createPost(payload) {
-    console.log(payload)
-    AppState.posts.push(payload)
-  }
-
-  removePost(id) {
-    const index = AppState.posts.findIndex(p => p.id === id)
-    AppState.posts.splice(index, 1)
-  }
-
-  updatePost(payload) {
-    const index = AppState.posts.findIndex(p => p.id === payload.id)
-    AppState.posts.splice(index, 1, payload)
   }
 }
 

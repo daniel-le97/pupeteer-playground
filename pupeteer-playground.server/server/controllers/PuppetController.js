@@ -149,6 +149,7 @@ export class PuppetController extends BaseController {
        args: ['--window-size=900,900',]
   });
   const page = await thumbBrowser.newPage();
+  await page.goto(url)
 
   let imageLinks = await page.evaluate(()=> {
     let tags = new Array()
@@ -167,15 +168,13 @@ export class PuppetController extends BaseController {
   async function markFix(){
     return new Promise(async (resolve, reject)=>{
       try {
-       let thumbImages = [];
          (async function(){
           for await(let link of imageLinks){
             logger.log("navigating to", link)
-       let tab = await thumbBrowser.newPage()
-       await tab.goto(link, {waitUntil: "networkidle0", timeout:3000}).catch(err=> console.log(err))
+       let tab = await thumbBrowser.newPage().catch(err => {logger.error(err);return})
+       await tab.goto(link, {waitUntil: "networkidle0", timeout:5000}).catch(err=> logger.error(err))
        let images = await tab.evaluate(() => Array.from(document.images, e => {return {url: e.src, height: e.height, width: e.width}}));
-       if(images == undefined) return
-       logger.log("linked images", images)
+       if(!images) continue
        let bigImage = ''
        let maxSize = 0
        images.forEach(image => {
@@ -185,16 +184,21 @@ export class PuppetController extends BaseController {
           }
         })
         if(maxSize > 180000){
-          thumbImages.push(bigImage)
-          logger.log("big image",maxSize,bigImage)
+          let image = await stlService.download(bigImage,_cleanUrl(url), filePath, imageLinks.indexOf(link))
+          socketService.messageRoom(socketRoom, 'download:image', image)
         }
-        tab.close()
+        await tab.close()
+        await page.waitForTimeout(200)
         openTabs--
         logger.log("remaining tabs", openTabs)
+        if(openTabs <= 0){
+          socketService.messageRoom(socketRoom, 'action:done', {})
+          thumbBrowser.close()
+        }
           }
 
          })();
-      resolve(thumbImages)
+      resolve()
     } catch (error) {
       reject(error)
     }
@@ -205,15 +209,12 @@ export class PuppetController extends BaseController {
     message: 'Looks like we found some thumbnails for larger images. Crawling these will take appoximately ' +(openTabs * 3)/60 + ' minutes',
     count: imageLinks.length
   })
-  thumbBrowser.close()
   // SECTION wait for tabs
-    let thumbImages = await markFix()
-    logger.log("Waitng for",(openTabs * 3)/60, 'minutes')
-    await page.waitForTimeout((openTabs * 3000))
-      for (let i = 0; i < thumbImages.length; i++) {
-        let image = await stlService.download(thumbImages[i],_cleanUrl(url), filePath, i)
-        socketService.messageRoom(socketRoom, 'download:image', image)
-    }
+  await markFix()
+  logger.warn("Waitng for",(openTabs * 6)/60, 'minutes')
+  await page.waitForTimeout((openTabs * 6000)).catch(err => logger.error(err))
+  logger.warn("times up closing browser")
+  thumbBrowser.close()
   socketService.messageRoom(socketRoom, 'action:done', {})
 }
 

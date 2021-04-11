@@ -14,6 +14,7 @@ class SaveLocalService {
     }
     logger.log('downloading', url)
     const response = await fetch(url);
+    logger.log(response.statusText)
     if(response.statusText == 'OK'){
       // buffer is the image data as a giant array
       const buffer = await response.buffer();

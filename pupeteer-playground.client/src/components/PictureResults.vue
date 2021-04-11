@@ -1,18 +1,5 @@
 <template>
   <div class=" text-light row p-5 bg-fade-dark">
-    <div class=" border-primary">
-      <Masonry :items="state.goodPictures">
-        <template #item="{item}">
-          <PictureComponent :picture-data="item" />
-        </template>
-      </Masonry>
-    </div>
-    <div class=" col-12 text-light justify-content-center">
-      <div class="row">
-        <Picture-component v-for="picture in state.badPictures" :key="picture.url" :picture-data="picture" />
-      </div>
-    </div>
-    <!-- NOTE this section needs to be cut out into a component -->
     <div v-if="state.loading > 0 " class="col-12">
       <div class="row align-items-center">
         <div class="col-8">
@@ -37,6 +24,19 @@
       {{ state.error }}
       <i class="ml-2 fas fa-sad-tear    "></i>
     </div>
+    <div class=" border-primary">
+      <Masonry :items="state.goodPictures">
+        <template #item="{item}">
+          <PictureComponent :picture-data="item" />
+        </template>
+      </Masonry>
+    </div>
+    <div class=" col-12 text-light justify-content-center">
+      <div class="row">
+        <Picture-component v-for="picture in state.badPictures" :key="picture.url" :picture-data="picture" />
+      </div>
+    </div>
+    <!-- NOTE this section needs to be cut out into a component -->
   <!-- --------------------------------------------------------- -->
   </div>
 </template>

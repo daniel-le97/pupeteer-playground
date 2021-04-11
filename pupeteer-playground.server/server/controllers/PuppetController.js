@@ -193,9 +193,10 @@ export class PuppetController extends BaseController {
         logger.log("remaining tabs", openTabs)
         if(openTabs <= 0){
           socketService.messageRoom(socketRoom, 'action:done', {})
+          page.close()
           thumbBrowser.close()
-        }
           }
+        }
 
          })();
       resolve()

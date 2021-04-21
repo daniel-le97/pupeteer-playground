@@ -1,9 +1,11 @@
 import { AppState } from '../AppState'
-import { puppetService } from './PuppetService'
 import { logger } from '../utils/Logger'
+import { puppetService } from './PuppetService'
+import { styleService } from './StyleService'
 
 const services = {
-  puppetService: puppetService
+  puppetService: puppetService,
+  styleService: styleService
 }
 
 class QueService {

@@ -11,6 +11,9 @@ export const AppState = reactive({
     error: null,
     found: 0
   },
+  styleResults: {
+    colors: []
+  },
   loading: 0,
   actionQue: [],
   socketUser: '',

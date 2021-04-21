@@ -1,43 +1,8 @@
 <template>
-  <div class=" text-light row p-5">
-    <div v-if="state.loading > 0 " class="col-12">
-      <div class="row align-items-center">
-        <div class="col-8">
-          <div v-if="!state.message">
-            Getting your pictures now. This could take a minute...
-          </div>
-          <div v-else>
-            {{ state.message }}
-          </div>
-        </div>
-        <div class="col">
-          <!-- Loading triangle -->
-          <div class="loader triangle">
-            <svg viewBox="0 0 86 80">
-              <polygon points="43 8 79 72 7 72"></polygon>
-            </svg>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div v-else-if="state.error" class="col-12">
-      {{ state.error }}
-      <i class="ml-2 fas fa-sad-tear    "></i>
-    </div>
-    <div class=" border-primary">
-      <Masonry :items="state.goodPictures">
-        <template #item="{item}">
-          <PictureComponent :picture-data="item" />
-        </template>
-      </Masonry>
-    </div>
-    <div class=" col-12 text-light justify-content-center">
-      <div class="row">
-        <Picture-component v-for="picture in state.badPictures" :key="picture.url" :picture-data="picture" />
-      </div>
-    </div>
-    <!-- NOTE this section needs to be cut out into a component -->
-  <!-- --------------------------------------------------------- -->
+  <div class="row">
+    <small v-for="(color, i) in state.colors" :key="i" class="color-block rounded m-1 shadow-sm" :style="'background:' +color">
+      {{ color }}
+    </small>
   </div>
 </template>
 
@@ -46,16 +11,13 @@ import { AppState } from '../AppState'
 import { computed, reactive, onMounted, watch, watchEffect } from 'vue'
 import { logger } from '../utils/Logger'
 export default {
-  name: 'PictureResults',
+  name: 'StyleResults',
   setup() {
     const state = reactive({
-      goodPictures: computed(() => AppState.imageResults.downloadedImages),
-      badPictures: computed(() => AppState.imageResults.failedImages),
+      colors: computed(() => AppState.styleResults.colors),
       message: computed(() => AppState.imageResults.message),
       error: computed(() => AppState.imageResults.error),
-      loading: computed(() => AppState.loading),
-      imgsFound: computed(() => AppState.imageResults.found)
-
+      loading: computed(() => AppState.loading)
     })
     return { state }
   }
@@ -64,20 +26,9 @@ export default {
 
 <style lang='scss' scoped>
 
-.masonry-with-columns {
-  columns: 6 200px;
-  column-gap: 1rem;
-  div {
-    width: 150px;
-    color: white;
-    margin: 0 1rem 1rem 0;
-    display: inline-block;
-    width: 100%;
-    text-align: center;
-    font-family: system-ui;
-    font-weight: 900;
-    font-size: 2rem;
-  }
+.color-block{
+  width:10vh;
+  height:5vh;
 }
 
 /* pictures fade in */

@@ -71,13 +71,20 @@ export default {
 .hoverable {
   cursor: pointer;
 }
+a {
+color:var(--light)!important;
+}
+
 a:hover {
-  text-decoration: none;
+  text-decoration: none!important;
 }
 .nav-link{
   text-transform: uppercase;
 }
 .nav-item .nav-link.router-link-exact-active{
-  color: var(--primary);
+  color: var(--light);
+  padding-left: 2em;
+  padding-right: 2em;
+  margin-bottom: 0em;
 }
 </style>

@@ -4,6 +4,7 @@ import { logger } from '../utils/Logger'
 import { SocketHandler } from '../utils/SocketHandler'
 import { puppetService } from './PuppetService'
 import { queService } from './QueService'
+import { styleService } from './StyleService'
 
 class SocketService extends SocketHandler {
   // register listeners for the room messages/emits that come from the server
@@ -14,6 +15,8 @@ class SocketService extends SocketHandler {
       .on('download:image', this.downloadImage)
       .on('found:image', this.foundImage)
       .on('action:done', this.nextAction)
+      .on('style:sheet', this.styleSheets)
+      .on('style:colors', this.foundColors)
   }
 
   getSocketRoom() {
@@ -23,6 +26,7 @@ class SocketService extends SocketHandler {
     this.emit('join:room', AppState.socketRoom)
   }
 
+  //  IMAGES ----------------
   downloadImage(payload) {
     puppetService.downloadImage(payload)
   }
@@ -31,6 +35,18 @@ class SocketService extends SocketHandler {
     puppetService.foundImage(payload)
   }
 
+  // ---------------------
+  //  STYLES ---------------
+  styleSheets(payload) {
+    logger.warn(payload)
+  }
+
+  foundColors(payload) {
+    logger.warn(payload)
+    styleService.foundColors(payload)
+  }
+
+  // -------------------
   nextAction() {
     queService.nextAction()
   }

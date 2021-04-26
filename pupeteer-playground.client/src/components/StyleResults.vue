@@ -1,8 +1,17 @@
 <template>
-  <div class="row">
-    <small v-for="(color, i) in state.colors" :key="i" class="color-block rounded m-1 shadow-sm" :style="'background:' +color">
-      {{ color }}
-    </small>
+  <div class="col-12 d-flex justify-content-center rounded w-100 p-0 checkerboard">
+    <div v-for="color in colorSort(state.colors)"
+         :id="'col:'+color.color"
+         :key="color.color"
+         class="color-block shadow-sm"
+         v-tooltip:top="`<div>
+           ${color.color}
+           <i class='bi-clipboard pl-1'></i>
+           </div>`"
+         :style="`background:${color.color};width:${Math.ceil(color.percent)}%;`"
+         @click="copyColor(color.color)"
+    >
+    </div>
   </div>
 </template>
 
@@ -10,6 +19,8 @@
 import { AppState } from '../AppState'
 import { computed, reactive, onMounted, watch, watchEffect } from 'vue'
 import { logger } from '../utils/Logger'
+import notification from '../utils/Notification'
+import $ from 'jquery'
 export default {
   name: 'StyleResults',
   setup() {
@@ -19,16 +30,67 @@ export default {
       error: computed(() => AppState.imageResults.error),
       loading: computed(() => AppState.loading)
     })
-    return { state }
+    function colorSort(dict) {
+      const arr = []
+      for (const key in dict) {
+        const value = dict[key]
+        arr.push({ color: key, percent: value })
+      }
+      arr.sort((a, b) => b.percent - a.percent)
+      return arr
+    }
+    return {
+      state,
+      colorSort,
+      copyColor(color) {
+        navigator.clipboard.writeText(color)
+        notification.toast('color copied', 'success', 'top-right', 2000, false)
+      }
+    }
+  },
+  directives: {
+    tooltip: function(el, binding) {
+      $(el).tooltip({
+        title: binding.value,
+        placement: binding.arg,
+        trigger: 'hover',
+        html: true
+      })
+    }
   }
 }
 </script>
 
 <style lang='scss' scoped>
 
+.square{
+  min-height: 5vh;
+  background-color: red;
+  color: var(--primary);
+}
+
 .color-block{
-  width:10vh;
-  height:5vh;
+  height:6vh;
+  transition: all ease .2s;
+  color: transparent;
+}
+.color-block:hover{
+  color: var(--light);
+}
+
+.checkerboard{
+  background-image: url('https://opengameart.org/sites/default/files/Transparency500.png') ;
+  background-size: 45%;
+
+}
+
+.col-12{
+  overflow: hidden;
+  flex-wrap: nowrap;
+}
+
+.vue-tooltip{
+  background: red;
 }
 
 /* pictures fade in */

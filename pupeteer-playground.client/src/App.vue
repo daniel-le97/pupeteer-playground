@@ -59,6 +59,7 @@ export default {
 <style lang="scss">
 @import "./assets/scss/main.scss";
 @import url('https://pro.fontawesome.com/releases/v5.10.0/css/all.css');
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css");
 #app{
  background-image: url('./assets/img/Background-blur.png');
  background-size: cover ;
@@ -72,6 +73,11 @@ input{
   background: transparent;
   color: rgb(209, 209, 209);
   border: solid 1px rgb(209, 209, 209);
+}
+
+.sweet-alert{
+  background: black;
+  color: var(--light)!important;
 }
 
 a {

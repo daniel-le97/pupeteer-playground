@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
 import { logger } from "../utils/Logger";
+import { fbsService } from './FireBaseService';
 const fs = require('fs')
 // Private Methods
 
@@ -18,6 +19,7 @@ class SaveLocalService {
     if(response.statusText == 'OK'){
       // buffer is the image data as a giant array
       const buffer = await response.buffer();
+      await fbsService.testFireBase(buffer) //FIXME
       // await this.mkdir(`/Users/beast/Pictures/puppeteer/${fileName}/image-${num}.png`, buffer, () => '');
       await this.mkdir(`${filePath}${fileName}/image-${num}.png`, buffer)
       imagePackage.status = 'ok'

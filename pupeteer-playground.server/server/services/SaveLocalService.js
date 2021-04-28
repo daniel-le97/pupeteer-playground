@@ -1,6 +1,5 @@
 import fetch from 'node-fetch';
 import { logger } from "../utils/Logger";
-import { fbsService } from './FireBaseService';
 const fs = require('fs')
 // Private Methods
 
@@ -11,6 +10,7 @@ class SaveLocalService {
   async download(url,fileName,filePath, num) {
     let imagePackage = {
       url: url,
+      data: {},
       status: 'bad'
     }
     logger.log('downloading', url)
@@ -18,10 +18,10 @@ class SaveLocalService {
     logger.log(response.statusText)
     if(response.statusText == 'OK'){
       // buffer is the image data as a giant array
-      const buffer = await response.buffer();
-      await fbsService.testFireBase(buffer) //FIXME
+      imagePackage.data = await response.buffer()
+      // await fbsService.testFireBase(buffer, fileName) //FIXME
       // await this.mkdir(`/Users/beast/Pictures/puppeteer/${fileName}/image-${num}.png`, buffer, () => '');
-      await this.mkdir(`${filePath}${fileName}/image-${num}.png`, buffer)
+      // await this.mkdir(`${filePath}${fileName}/image-${num}.png`, buffer) FIXME
       imagePackage.status = 'ok'
     }
     return imagePackage

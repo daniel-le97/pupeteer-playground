@@ -5,11 +5,15 @@
 
     <StyleResults v-if="state.mode == 'colors'" />
   </div>
+  <button class="btn btn-outline-light" @click="downloadResults">
+    download results
+  </button>
 </template>
 
 <script>
 import { AppState } from '../AppState'
 import { computed, reactive, onMounted } from 'vue'
+import { firebaseService } from '../services/FireBaseService'
 export default {
   name: 'Results',
   setup() {
@@ -17,7 +21,12 @@ export default {
       mode: 'colors'
 
     })
-    return { state }
+    return {
+      state,
+      downloadResults() {
+        firebaseService.downloadFireBase()
+      }
+    }
   }
 }
 </script>

@@ -1,6 +1,7 @@
 import { AppState } from '../AppState'
 import { logger } from '../utils/Logger'
 import { api } from './AxiosService'
+import { firebaseService } from './FireBaseService'
 
 const testPics = {
   smallest: [
@@ -154,7 +155,9 @@ class PuppetService {
   downloadImage(image) {
     // logger.log(image)
     switch (image.status) {
-      case 'ok': AppState.imageResults.downloadedImages.push(image); break
+      case 'ok': AppState.imageResults.downloadedImages.push(image)
+        firebaseService.addToFireBase(image.data, image.url)
+        break
       case 'bad': AppState.imageResults.downloadedImages.push(image); break
     }
     AppState.imageResults.found--

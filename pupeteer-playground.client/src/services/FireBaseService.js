@@ -6,7 +6,6 @@ import JSZip from 'jszip'
 import { AppState } from '../AppState'
 import { logger } from '../utils/Logger'
 
-
 firebase.initializeApp({
   apiKey: 'AIzaSyDEvPcGuUQZ6LQY6cRWhUumIVJps0zx5UQ',
   authDomain: 'puppeteer-playground-2bec8.firebaseapp.com',
@@ -26,16 +25,24 @@ class FirebaseService {
   }
 
   async downloadFireBase() {
-    const jszip = new JSZip();
-    const folderRef = firebase.storage().ref(folderPath);
-    const files = (await folderRef.listAll()).items;
-    const downloadUrls: Array<string> = await Promise.all(
-        files.map(({ name }) => folderRef.child(name).getDownloadURL())
-    );
-    const downloadedFiles = await Promise.all(downloadUrls.map(url => fetch(url).then(res => res.blob())));
-    downloadedFiles.forEach((file, i) => jszip.file(files[i].name, file));
-    const content = await jszip.generateAsync({ type: 'blob' });
-    saveAs(content, folderPath);
+    const folderPath = '/tests/' + AppState.socketUser
+    const jszip = new JSZip()
+    const folderRef = firebase.storage().ref(folderPath)
+    const files = (await folderRef.listAll()).items
+    const downloadUrls = []
+    await Promise.all(
+      files.map(async({ name }) => folderRef.child(name).getDownloadURL().then(res => downloadUrls.push(res)))
+    )
+    logger.log('urls', downloadUrls)
+    const downloadedFiles = []
+    await Promise.all(downloadUrls.map(url => fetch(url).then(async(res) => {
+      downloadedFiles.push(await res.blob())
+    }).catch(err => logger.error(err))))
+
+    logger.warn('blobs', downloadedFiles)
+    downloadedFiles.forEach((file, i) => jszip.file(files[i].name, file))
+    const content = await jszip.generateAsync({ type: 'blob' })
+    saveAs(content, folderPath)
   }
 }
 

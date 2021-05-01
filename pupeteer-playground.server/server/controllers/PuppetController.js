@@ -39,7 +39,7 @@ export class PuppetController extends BaseController {
     try {
       let url = _urlCheck(req.body.url)
       let filePath = _cleanPath(req.body.filePath)
-      const browser = await puppeteer.launch({headless: false, defaultViewport: null,   args: [
+      const browser = await puppeteer.launch({headless: true, defaultViewport: null,   args: [
         '--window-size=1920,1080',
       ]});
       const page = await browser.newPage();
@@ -62,7 +62,7 @@ export class PuppetController extends BaseController {
       let url = _urlCheck(req.body.url)
       let socketRoom = req.body.socketRoom
       const browser = await puppeteer.launch({
-        headless: false,
+        headless: true,
         defaultViewport: null,
            args: ['--window-size=900,900',]
       });
@@ -100,7 +100,7 @@ export class PuppetController extends BaseController {
     let url = _urlCheck(req.body.url)
     let socketRoom = req.body.socketRoom
     const backgroundBrowser = await puppeteer.launch({
-      headless: false,
+      headless: true,
       defaultViewport: null,
          args: ['--window-size=900,900',]
     });
@@ -144,7 +144,7 @@ export class PuppetController extends BaseController {
   let url = _urlCheck(req.body.url)
   let socketRoom = req.body.socketRoom
   const thumbBrowser = await puppeteer.launch({
-    headless: false,
+    headless: true,
     defaultViewport: null,
        args: ['--window-size=900,900',]
   });

@@ -14,6 +14,7 @@
 import { AppState } from '../AppState'
 import { computed, reactive, onMounted } from 'vue'
 import { firebaseService } from '../services/FireBaseService'
+import { logger } from '../utils/Logger'
 export default {
   name: 'Results',
   setup() {
@@ -23,8 +24,8 @@ export default {
     })
     return {
       state,
-      downloadResults() {
-        firebaseService.downloadFireBase()
+      async downloadResults() {
+        await firebaseService.downloadFireBase()
       }
     }
   }

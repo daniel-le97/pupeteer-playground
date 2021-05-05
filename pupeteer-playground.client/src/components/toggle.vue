@@ -1,6 +1,7 @@
+/* eslint-disable vue/no-mutating-props */
 <template>
-  <div class="switch-container" @click=" state.options.scrapeImages = !state.options.scrapeImages">
-    <div class="switch" :class="state.options.scrapeImages? 'switchOn': 'switchOff'"></div>
+  <div class="switch-container">
+    <div class="switch" :class="bool? 'switchOn': 'switchOff'"></div>
   </div>
 </template>
 
@@ -8,8 +9,12 @@
 import { AppState } from '../AppState'
 import { computed, reactive, onMounted } from 'vue'
 export default {
-  name: 'Component',
-  setup() {
+  props: {
+    bool: { type: Boolean, required: true },
+    options: { size: { type: Number, default: 20 } }
+  },
+  name: 'Toggle',
+  setup(props) {
     const state = reactive({
 
     })
@@ -18,18 +23,18 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
 .switch{
-  height: .9em;
-  width: .9em;
+  height: 20px;
+  width: 20px;
   transition: all .2s;
   border-radius: 10px;
 }
 
 .switch-container{
   display: flex;
-  height: 1em;
-  width: 3em;
+  height: 20px;
+  width: 60px;
   border: 1px solid var(--light);
   border-radius: 10px;
   cursor: pointer;
@@ -38,11 +43,11 @@ export default {
 .switchOn{
   background-color: var(--light);
   border: 1px solid transparent;
-  transform: translateX(2em);
+  transform: translate(39px, -1px);
 }
 .switchOff{
   background-color: transparent;
   border: 1px solid var(--light);
-  transform: translateX(-1px);
+  transform: translate(-1px, -1px);
 }
 </style>

@@ -23,11 +23,23 @@
       </div>
       <div class="col-12">
         <div id="settings" data-toggle="collapse" class="row justify-items-center settings-container collapse">
-          <div class="col-8">
-            images and image sources
+          <div class="col-6 pt-2">
+            Images and image sources on the page
           </div>
-          <div class="col-4 d-flex align-items-center">
-            <Toggle />
+          <div class="col-6 pt-2 d-flex align-items-center">
+            <Toggle :bool="state.options.scrapeImages" @click="state.options.scrapeImages = !state.options.scrapeImages" />
+          </div>
+          <div class="col-6 pt-2">
+            Background images
+          </div>
+          <div class="col-6 pt-2 d-flex align-items-center">
+            <Toggle :bool="state.options.scrapeBackgrounds" @click="state.options.scrapeBackgrounds = !state.options.scrapeBackgrounds" />
+          </div>
+          <div class="col-6 pt-2">
+            Full images from thumbnails
+          </div>
+          <div class="col-6 pt-2 d-flex align-items-center">
+            <Toggle :bool="state.options.scrapeThumbnails" @click="state.options.scrapeThumbnails = !state.options.scrapeThumbnails" />
           </div>
         </div>
       </div>

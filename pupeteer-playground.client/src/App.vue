@@ -1,9 +1,10 @@
 <template>
+  <div class="background paralax-layer paralax-layer-back"></div>
   <header>
     <Navbar />
   </header>
-  <main>
-    <div class="container-fluid home text-light">
+  <main class="paralax">
+    <div class="container-fluid pt-5 home text-light">
       <div class="row justify-content-center h-100 align-content-center p-1">
         <div class="col-md-8">
           <div class="row justify-content-start">
@@ -60,11 +61,29 @@ export default {
 @import "./assets/scss/main.scss";
 @import url('https://pro.fontawesome.com/releases/v5.10.0/css/all.css');
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css");
-#app{
- background-image: url('./assets/img/Background-blur.png');
- background-size: cover ;
- background-position: center;
 
+.background{
+ background-image: url('./assets/img/BackgroundMirror.png');
+ background-size: cover;
+}
+
+#app{
+  perspective: 1px;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.paralax-layer{
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.paralax-layer-back{
+  transform: translateZ(-2px) scale(3);
 }
 
 input{
@@ -102,6 +121,7 @@ a:hover {
 }
 
 .bg-fade-dark{
+  backdrop-filter: blur(5px);
   background:#1e1e1e80;
 }
 .bg-fade-light{
@@ -138,4 +158,5 @@ body::-webkit-scrollbar-thumb {
  border-radius: 10px;
   background-color:#1e1e1e80;
 }
+
 </style>

@@ -58,6 +58,11 @@ export default {
 </script>
 
 <style scoped>
+
+.navbar{
+position: absolute  ;
+z-index: 0;
+}
 .dropdown-menu {
   user-select: none;
   border:none;

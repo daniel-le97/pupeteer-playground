@@ -11,32 +11,27 @@
   <div class="col-12 text-light">
     enter url
     <input v-model="state.search.url" class="w-100" type="text">
-    <input v-model="state.search.filePath" class="w-100" type="text">
-    <div class="mb-3">
-      enter file path
-    </div>
-    <div class="col-12 mb-3">
-      <div class="row justify-items-center">
-        <small class="col text-center">
-          <input type="checkbox" class="form-check-input" :checked="state.options.scrapeImages" @change="state.options.scrapeImages = !state.options.scrapeImages">
-          <label class="form-check-label" for="exampleCheck1">image tags</label>
-        </small>
-        <small class="col text-center">
-          <input type="checkbox" class="form-check-input" :checked="state.options.scrapeBackgrounds" @change="state.options.scrapeBackgrounds = !state.options.scrapeBackgrounds">
-          <label class="form-check-label" for="exampleCheck1">background images</label>
-        </small>
-        <small class="col text-center">
-          <input type="checkbox" class="form-check-input" :checked="state.options.scrapeThumbnails" @change="state.options.scrapeThumbnails = !state.options.scrapeThumbnails">
-          <label class="form-check-label" for="exampleCheck1">thumbnails</label>
-        </small>
-      </div>
-    </div>
     <button class="btn btn-outline-light col-6" @click="getScreenCap">
       get site cap
     </button>
     <button class="btn btn-outline-light col-6" @click="getScrape">
       scrape images
     </button>
+    <div class="row my-2 px-0">
+      <div class="col-12 cog pl-4">
+        <i class="fa fa-cog" aria-hidden="true" data-toggle="collapse" data-target="#settings"></i>
+      </div>
+      <div class="col-12">
+        <div id="settings" data-toggle="collapse" class="row justify-items-center settings-container collapse">
+          <div class="col-8">
+            images and image sources
+          </div>
+          <div class="col-4 d-flex align-items-center">
+            <Toggle />
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -90,7 +85,21 @@ export default {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+
+.settings-container{
+  // transform: translateY(-1em);
+}
+
+.fa-cog{
+  position: absolute;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.cog{
+  min-height: 1em;
+}
 
 .compLoad-enter-active,
 .compLoad-leave-active {

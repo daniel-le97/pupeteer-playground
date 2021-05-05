@@ -42,14 +42,14 @@ class FirebaseService {
     logger.warn('blobs', downloadedFiles)
     downloadedFiles.forEach((file, i) => jszip.file(files[i].name, file))
     const content = await jszip.generateAsync({ type: 'blob' })
-    const fileHandle = await window.showSaveFilePicker({
-      types: [{
-        description: 'zip file',
-        accept: { 'zip/archive': ['.zip'] }
-      }]
-    })
-    logger.log(fileHandle)
-    saveAs(content, fileHandle.name, fileHandle)
+    // const fileHandle = await window.showSaveFilePicker({
+    //   types: [{
+    //     description: 'zip file',
+    //     accept: { 'zip/archive': ['.zip'] }
+    //   }]
+    // })
+    // logger.log(fileHandle)
+    saveAs(content, 'test')
   }
 }
 

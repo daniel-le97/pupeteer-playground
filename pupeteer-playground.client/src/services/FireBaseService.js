@@ -18,6 +18,7 @@ const db = firebase.storage()
 
 // TODO Delete folder on user Download
 // TODO Cleaner Download naming
+// TODO Clear Firebase folder on new search
 
 class FirebaseService {
   addToFireBase(buffer, filePath) {

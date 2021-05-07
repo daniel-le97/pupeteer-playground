@@ -89,7 +89,6 @@ export default {
           queService.addAction(payload)
         }
       }
-      queService.nextAction()
     }
     return {
       state,

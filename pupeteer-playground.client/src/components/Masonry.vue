@@ -1,9 +1,9 @@
 <template>
-  <div class="masonry-with-columns">
+  <transition-group name="masonry" class="masonry-with-columns" tag="div">
     <div v-for="(item,i) in items" :key="i" class="">
       <slot name="item" :i="i" :item="item" />
     </div>
-  </div>
+  </transition-group>
 </template>
 
 <script>
@@ -33,5 +33,16 @@ export default {
     display: inline-block;
     text-align: center;
       }
+}
+
+/* pictures fade in */
+.masonry-enter-active,
+.masonry-leave-active {
+  transition: all 0.5s ease;
+}
+.masonry-enter-from,
+.masonry-leave-to {
+  opacity: 0;
+  transform: scale(.8);
 }
 </style>

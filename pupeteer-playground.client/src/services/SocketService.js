@@ -48,6 +48,7 @@ class SocketService extends SocketHandler {
 
   // -------------------
   nextAction() {
+    AppState.working = false
     queService.nextAction()
   }
 

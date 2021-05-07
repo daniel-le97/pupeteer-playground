@@ -11,12 +11,13 @@ const services = {
 class QueService {
   addAction(payload) {
     logger.log('[Action added to Queue]', payload)
-    AppState.loading++
+    if (AppState.loading == null) AppState.loading = 0
     AppState.actionQue = [...AppState.actionQue, payload]
   }
 
   nextAction() {
-    if (AppState.actionQue.length > 0) {
+    if (AppState.actionQue.length > 0 && !AppState.working) {
+      AppState.working = true
       const action = AppState.actionQue.shift()
       logger.log('[Performing Action]', action)
       services[action.service][action.action](action.search)

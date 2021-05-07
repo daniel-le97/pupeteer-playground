@@ -14,7 +14,8 @@ export const AppState = reactive({
   styleResults: {
     colors: []
   },
-  loading: 0,
+  loading: null,
+  working: false,
   actionQue: [],
   socketUser: '',
   socketRoom: ''

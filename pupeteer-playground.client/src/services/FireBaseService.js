@@ -16,12 +16,18 @@ firebase.initializeApp({
 })
 const db = firebase.storage()
 
+// TODO Delete folder on user Download
+// TODO Cleaner Download naming
+
 class FirebaseService {
   addToFireBase(buffer, filePath) {
     const fileName = filePath.split('/')
     const dbRef = db.ref().child('/tests/' + AppState.socketUser + '/' + fileName[fileName.length - 1])
     const image = new Uint8Array(buffer)
-    dbRef.put(image).then((snapshot) => { logger.log('uploaded picture ' + fileName[fileName.length - 1]) }).catch(err => logger.error(err))
+    dbRef.put(image).then((snapshot) => {
+      AppState.loading--
+      logger.log('uploaded picture ' + fileName[fileName.length - 1])
+    }).catch(err => logger.error(err))
   }
 
   async downloadFireBase() {

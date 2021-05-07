@@ -72,7 +72,6 @@ class PuppetService {
 
   async getScrape(url) {
     try {
-      AppState.loading = true
       AppState.imageResults.downloadedImages = []
       AppState.imageResults.failedImages = []
       url.socketRoom = AppState.socketRoom
@@ -80,10 +79,8 @@ class PuppetService {
       const res = await api.put('/api/puppet/scrape', url)
       logger.log(res.data)
       AppState.imageResults.message = res.data.message
-      AppState.loading = false
     } catch (err) {
       logger.error('HAVE YOU STARTED YOUR SERVER YET???', err)
-      AppState.loading = false
       if (err.message) {
         const message = err.message.split(':')
         AppState.imageResults.error = { error: message[message.length - 1] }
@@ -98,10 +95,8 @@ class PuppetService {
       const res = await api.put('api/puppet/scrape/images', search)
       AppState.imageResults.message = res.data.message
       AppState.imageResults.found += res.data.count
-      AppState.loading -= 1
     } catch (err) {
       logger.error(err)
-      AppState.loading -= 1
       if (err.message) {
         const message = err.message.split(':')
         AppState.imageResults.error = { error: message[message.length - 1] }
@@ -116,10 +111,8 @@ class PuppetService {
       const res = await api.put('api/puppet/scrape/backgrounds', search)
       AppState.imageResults.message = res.data.message
       AppState.imageResults.found += res.data.count
-      AppState.loading -= 1
     } catch (err) {
       logger.error(err)
-      AppState.loading -= 1
       if (err.message) {
         const message = err.message.split(':')
         AppState.imageResults.error = { error: message[message.length - 1] }
@@ -134,10 +127,8 @@ class PuppetService {
       const res = await api.put('api/puppet/scrape/thumbnails', search)
       AppState.imageResults.message = res.data.message
       AppState.imageResults.found += res.data.count
-      AppState.loading -= 1
     } catch (err) {
       logger.error(err)
-      AppState.loading -= 1
       if (err.message) {
         const message = err.message.split(':')
         AppState.imageResults.error = { error: message[message.length - 1] }
@@ -156,11 +147,22 @@ class PuppetService {
     // logger.log(image)
     switch (image.status) {
       case 'ok': AppState.imageResults.downloadedImages.push(image)
+        AppState.loading++
         firebaseService.addToFireBase(image.data, image.url)
         break
       case 'bad': AppState.imageResults.downloadedImages.push(image); break
     }
     AppState.imageResults.found--
+  }
+
+  clearResults() {
+    AppState.imageResults = {
+      downloadedImages: [],
+      failedImages: [],
+      message: null,
+      error: null,
+      found: 0
+    }
   }
 }
 

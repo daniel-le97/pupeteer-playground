@@ -4,8 +4,9 @@
     <PictureResults v-if="state.mode == 'ImageStealer'" />
 
     <StyleResults v-if="state.mode == 'StyleThief'" />
-    <div class="col">
-      <button class="btn btn-outline-light" @click="downloadResults">
+    <div class="col text-light">
+      {{ state.loading }}, {{ state.working }}
+      <button v-if="state.loading === 0 && !state.working" class="btn btn-outline-light" @click="downloadResults">
         download results
       </button>
     </div>
@@ -23,7 +24,9 @@ export default {
   setup() {
     const route = useRoute()
     const state = reactive({
-      mode: computed(() => route.name)
+      mode: computed(() => route.name),
+      loading: computed(() => AppState.loading),
+      working: computed(() => AppState.working)
 
     })
     return {

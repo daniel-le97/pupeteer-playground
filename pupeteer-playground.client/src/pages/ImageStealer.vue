@@ -11,8 +11,8 @@
   <div class="col-12 text-light">
     enter url
     <input v-model="state.search.url" class="w-100" type="text">
-    <div class="row my-2 px-0 justify-content-center align-items-center">
-      <button class=" btn sbtn round" @click="getScrape">
+    <div class="row my-3 px-0 justify-content-center align-items-center">
+      <button class=" btn col-4 mbtn-light rounded-8" @click="getScrape">
         <div class="btn-text">
           Scrape Images
         </div>
@@ -21,24 +21,30 @@
         <i class="fa fa-cog mr-3" aria-hidden="true" data-toggle="collapse" data-target="#settings" v-tooltip:right="'configure'"></i>
       </div>
       <div class="col-12">
-        <div id="settings" data-toggle="collapse" class="row bg-fade-light rounded-8 p-3 justify-content-center align-items-center settings-container collapse">
-          <div class="col-6 py-1">
+        <div id="settings" data-toggle="collapse" class="row bg-fade-light rounded-8  justify-content-center align-items-center settings-container collapse">
+          <div class="col-9 col-md-7  py-2 pt-4">
             Images and image sources on the page
           </div>
-          <div class="col-3 py-1 d-flex align-items-center">
+          <div class="col-3 py-2 d-flex align-items-center">
             <Toggle :bool="state.options.scrapeImages" @click="state.options.scrapeImages = !state.options.scrapeImages" />
           </div>
-          <div class="col-6 py-1">
+          <div class="col-9 col-md-7  py-2">
             Background images
           </div>
-          <div class="col-3 py-1 d-flex align-items-center">
+          <div class="col-3 py-2 d-flex align-items-center">
             <Toggle :bool="state.options.scrapeBackgrounds" @click="state.options.scrapeBackgrounds = !state.options.scrapeBackgrounds" />
           </div>
-          <div class="col-6 py-1">
+          <div class="col-9 col-md-7  py-2">
             Full images from thumbnails
           </div>
-          <div class="col-3 py-1 d-flex align-items-center">
+          <div class="col-3 py-2 d-flex align-items-center">
             <Toggle :bool="state.options.scrapeThumbnails" @click="state.options.scrapeThumbnails = !state.options.scrapeThumbnails" />
+          </div>
+          <div class="col-9 col-md-7  py-2">
+            Clear results with each search
+          </div>
+          <div class="col-3 py-2 pb-4 d-flex align-items-center">
+            <Toggle :bool="state.clearResults" @click="state.clearResults = !state.clearResults" />
           </div>
         </div>
       </div>
@@ -56,6 +62,7 @@ export default {
   name: 'ImageStealer',
   setup() {
     const state = reactive({
+      clearResults: true,
       options: { scrapeImages: true, scrapeBackgrounds: false, scrapeThumbnails: false },
       search: {
         url: '',
@@ -70,6 +77,7 @@ export default {
       puppetService.getScreenshot(state.search)
     }
     function getScrape() {
+      if (state.clearResults === true) puppetService.clearResults()
       for (const key in state.options) {
         if (state.options[key]) {
           state.mode = 'picture scrape'
@@ -131,7 +139,7 @@ export default {
 
 @keyframes rotate-btn {
   0% {
-    transform: rotate(0),scale(1.5);
+    transform: rotate(0);
   }
   100% {
     transform: rotate(-360deg);

@@ -125,7 +125,6 @@ a:hover {
 }
 
 .bg-fade-dark{
-  backdrop-filter: blur(5px);
   background:#1e1e1e80;
 }
 .bg-fade-light{
@@ -163,51 +162,20 @@ a:hover {
   background-color:#1e1e1e80;
 }
 
-.sbtn{
-  position: relative;
-  overflow: hidden;
-  &::before{
-    transition: all 0.2s ease-in-out;
-    content: '';
-    width: 50%;
-    height: 100%;
-    background: black;
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
+.mbtn-light{
+  color: var(--light);
+  border: 1px solid var(--light);
+  border-bottom: 4px solid var(--light);
+  transform: translateY(-4px);
+  transition: all .2s ease;
+}
 
-  & .btn-text{
-    color: white;
-    // check out mdn docs for different types of blend modes.
-    mix-blend-mode: exclusion;
-  }
-  &:hover{
-    &::before{
-      background: black;
-      width: 100%;
-    }
-  }
-  //rounded btn styles
-  &.round{
-    border-radius:50px;
-    & .text{
-      color:var(--secondary);
-      mix-blend-mode: exclusion;
-    }
-
-    &::before{
-      border-radius: 50px;
-      width: 30%;
-      background: #623f8a;
-    }
-    &:hover{
-      &::before{
-      background: #623f8a;
-        width: 100%;
-      }
-    }
-  }
+.mbtn-light:hover{
+  color: var(--light);
+  background: #1e1e1e80;
+  border-bottom: 1px solid var(--light);
+  transform: translateY(0px);
+  margin-bottom: 3px;
 }
 
 </style>

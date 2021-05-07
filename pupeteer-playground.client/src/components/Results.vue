@@ -4,10 +4,12 @@
     <PictureResults v-if="state.mode == 'ImageStealer'" />
 
     <StyleResults v-if="state.mode == 'StyleThief'" />
+    <div class="col">
+      <button class="btn btn-outline-light" @click="downloadResults">
+        download results
+      </button>
+    </div>
   </div>
-  <button class="btn btn-outline-light" @click="downloadResults">
-    download results
-  </button>
 </template>
 
 <script>

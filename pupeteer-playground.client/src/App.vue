@@ -65,13 +65,17 @@ export default {
 .background{
  background-image: url('./assets/img/BackgroundMirror.png');
  background-size: cover;
+ background-repeat:repeat-x;
 }
 
 #app{
   perspective: 1px;
-  height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
+}
+
+button:hover div{
+
 }
 
 .paralax-layer{
@@ -144,19 +148,66 @@ a:hover {
 }
 
 // Scroll bar
-body::-webkit-scrollbar {
+*::-webkit-scrollbar {
   width: 5px;
   background-color: transparent;
 }
 
-body::-webkit-scrollbar-track {
+*::-webkit-scrollbar-track {
   width: 2px;
   background-color: transparent;
 }
 
-body::-webkit-scrollbar-thumb {
- border-radius: 10px;
+*::-webkit-scrollbar-thumb {
+ border-radius: 15px;
   background-color:#1e1e1e80;
+}
+
+.sbtn{
+  position: relative;
+  overflow: hidden;
+  &::before{
+    transition: all 0.2s ease-in-out;
+    content: '';
+    width: 50%;
+    height: 100%;
+    background: black;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  & .btn-text{
+    color: white;
+    // check out mdn docs for different types of blend modes.
+    mix-blend-mode: exclusion;
+  }
+  &:hover{
+    &::before{
+      background: black;
+      width: 100%;
+    }
+  }
+  //rounded btn styles
+  &.round{
+    border-radius:50px;
+    & .text{
+      color:var(--secondary);
+      mix-blend-mode: exclusion;
+    }
+
+    &::before{
+      border-radius: 50px;
+      width: 30%;
+      background: #623f8a;
+    }
+    &:hover{
+      &::before{
+      background: #623f8a;
+        width: 100%;
+      }
+    }
+  }
 }
 
 </style>

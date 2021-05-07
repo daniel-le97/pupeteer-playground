@@ -99,9 +99,9 @@ class PuppetService {
       logger.error(err)
       if (err.message) {
         const message = err.message.split(':')
-        AppState.imageResults.error = { error: message[message.length - 1] }
+        AppState.error = { error: message[message.length - 1] }
       } else {
-        AppState.imageResults.error = { error: 'unknown error, please try again' }
+        AppState.error = { error: 'unknown error, please try again' }
       }
     }
   }
@@ -115,9 +115,9 @@ class PuppetService {
       logger.error(err)
       if (err.message) {
         const message = err.message.split(':')
-        AppState.imageResults.error = { error: message[message.length - 1] }
+        AppState.error = { error: message[message.length - 1] }
       } else {
-        AppState.imageResults.error = { error: 'unknown error, please try again' }
+        AppState.error = { error: 'unknown error, please try again' }
       }
     }
   }
@@ -131,9 +131,9 @@ class PuppetService {
       logger.error(err)
       if (err.message) {
         const message = err.message.split(':')
-        AppState.imageResults.error = { error: message[message.length - 1] }
+        AppState.error = { error: message[message.length - 1] }
       } else {
-        AppState.imageResults.error = { error: 'unknown error, please try again' }
+        AppState.error = { error: 'unknown error, please try again' }
       }
     }
   }

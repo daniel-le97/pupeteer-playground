@@ -25,6 +25,7 @@ export default {
   transition: all .3s ease;
 }
 .pictureComponent:hover img{
+   filter: drop-shadow(2px 4px 6px rgba(32, 24, 51, 0.308));
     transform: scale(1.03);
     z-index: +100;
 }

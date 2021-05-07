@@ -1,5 +1,5 @@
 <template>
-  <div class="background paralax-layer paralax-layer-back"></div>
+  <div class="background1 paralax-layer paralax-layer-back"></div>
   <header>
     <Navbar />
   </header>
@@ -21,7 +21,7 @@
           </div>
         </div>
         <div class="col-md-8 bg-fade-dark content1 rounded-8 rounded-top-left-0">
-          <div class="row justify-content-center p-5 my-1 window">
+          <div class="row justify-content-center px-4 pt-4 pb-2 my-1 window">
             <router-view />
           </div>
         </div>
@@ -62,33 +62,35 @@ export default {
 @import url('https://pro.fontawesome.com/releases/v5.10.0/css/all.css');
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css");
 
-.background{
- background-image: url('./assets/img/BackgroundMirror.png');
+body{
+ background-image: url('./assets/img/frame1.png'), url('./assets/img/frame2.png');
+ background-repeat: no-repeat, no-repeat;
  background-size: cover;
- background-repeat:repeat-x;
+ background-position: 0 top, 0 bottom;
 }
 
-#app{
-  perspective: 1px;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
+// #app{
+//   perspective: 1px;
+//   height: 100vh;
+//   overflow-x: hidden;
+//   overflow-y: auto;
+// }
 
-button:hover div{
+// .paralax-layer{
+//   position: absolute;
+//   top: 0;
+//   right: 0;
+//   bottom: 0;
+//   left: 0;
+// }
 
-}
+// .paralax-layer-back{
+//   transform: translateZ(-2px) scale(3);
+// }
 
-.paralax-layer{
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-}
-
-.paralax-layer-back{
-  transform: translateZ(-2px) scale(3);
-}
+// .paralax-layer-deep{
+//   transform: translateZ(-3px) scale(4);
+// }
 
 input{
   border-radius: 4px;
@@ -126,6 +128,7 @@ a:hover {
 
 .bg-fade-dark{
   background:#1e1e1e80;
+  backdrop-filter: blur(5px);
 }
 .bg-fade-light{
  background:#1e1e1e56;

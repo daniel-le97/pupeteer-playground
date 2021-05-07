@@ -1,5 +1,5 @@
 <template>
-  <!-- <button @click="testData('big')" class="btn btn-outline-warning">
+  <button @click="testData('big')" class="btn btn-outline-warning">
     add test data big
   </button>
   <button @click="testData('small')" class="btn btn-outline-warning">
@@ -7,7 +7,7 @@
   </button>
   <button @click="testData('smallest')" class="btn btn-outline-warning">
     add test data small
-  </button> -->
+  </button>
   <div class="col-12 text-light">
     enter url
     <input v-model="state.search.url" class="w-100" type="text">
@@ -17,8 +17,8 @@
           Scrape Images
         </div>
       </button>
-      <div class=" cog pl-4">
-        <i class="fa fa-cog mr-3" aria-hidden="true" data-toggle="collapse" data-target="#settings" v-tooltip:right="'configure'"></i>
+      <div class="cog p-1 pl-2 pr-0 ml-2 pb-2" data-toggle="collapse" data-target="#settings" v-tooltip:right="'configure'">
+        <i class="fa fa-cog mr-3" aria-hidden="true"></i>
       </div>
       <div class="col-12">
         <div id="settings" data-toggle="collapse" class="row bg-fade-light rounded-8  justify-content-center align-items-center settings-container collapse">
@@ -121,19 +121,19 @@ export default {
 }
 
 .fa-cog{
-  position: absolute;
   z-index: 1000;
-  cursor: pointer;
 
 }
 
 .cog{
   min-height: 1em;
+  cursor: pointer;
+
 }
 
-.fa-cog:hover{
-    animation: rotate-btn 1s linear 3;
-  -webkit-animation: rotate-btn 1s linear 3;
+.cog:hover .fa-cog{
+    animation: rotate-btn 1s linear infinite;
+  -webkit-animation: rotate-btn 1s linear infinite;
 }
 
 @keyframes rotate-btn {

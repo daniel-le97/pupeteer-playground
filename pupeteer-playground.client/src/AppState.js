@@ -8,12 +8,12 @@ export const AppState = reactive({
     downloadedImages: [],
     failedImages: [],
     message: null,
-    error: null,
     found: 0
   },
   styleResults: {
     colors: []
   },
+  error: null,
   loading: null,
   working: false,
   actionQue: [],

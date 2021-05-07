@@ -1,6 +1,9 @@
 <template>
   <div v-if="state.loading == null"></div>
   <div v-else class="Results row rounded-8 justify-content-center p-5 bg-fade-dark my-1 window">
+    <div v-if="!state.error" class="error">
+      {{ state.error }}
+    </div>
     <!-- Loading triangle -->
     <div v-if="state.loading > 0 || state.working == true" class="col-12">
       working on it...
@@ -37,7 +40,8 @@ export default {
     const state = reactive({
       mode: computed(() => route.name),
       loading: computed(() => AppState.loading),
-      working: computed(() => AppState.working)
+      working: computed(() => AppState.working),
+      error: computed(() => AppState.error)
 
     })
     return {

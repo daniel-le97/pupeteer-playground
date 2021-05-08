@@ -65,7 +65,7 @@ class SocketService extends SocketHandler {
   }
 
   connected(payload) {
-    console.log(payload.message)
+    logger.log(payload.message)
   }
 }
 

@@ -22,7 +22,9 @@ const db = firebase.storage()
 
 class FirebaseService {
   addToFireBase(buffer, filePath) {
-    const fileName = filePath.split('/').shift().join('_')
+    const paths = filePath.split('/')
+    paths.shift()
+    const fileName = paths.join('_')
     const dbRef = db.ref().child('/tests/' + AppState.socketUser + '/' + fileName)
     const image = new Uint8Array(buffer)
     dbRef.put(image).then((snapshot) => {

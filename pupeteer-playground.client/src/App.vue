@@ -67,7 +67,7 @@ body{
  background-image: url('./assets/img/frame1.png'), url('./assets/img/frame2.png'), url('./assets/img/frame1.png'), url('./assets/img/frame2.png'), url('./assets/img/frame1.png'), url('./assets/img/frame2.png'), url('./assets/img/frame1.png'), url('./assets/img/frame2.png');
  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
  background-size: 100vw, contain, contain, contain, contain, contain, contain, contain;
- background-position: 0 top, 0 120vw, 0 240vw, 0 360vw, 0 480vw, 0 600vw, 0 720vw, 0 840vw;
+ background-position: 0 top, 0 125vw, 0 245vw, 0 365vw, 0 485vw, 0 605vw, 0 725vw, 0 845vw;
 }
 
 input{

@@ -6,6 +6,14 @@ import { logger } from '../utils/Logger';
 const fs = require('fs')
 const path = require('path')
 
+const chromeOptions = {headless: true, defaultViewport: null,   args: [
+  "--incognito",
+  "--no-sandbox",
+  "--single-process",
+  '--disable-setuid-sandbox',
+  "--no-zygote"
+]}
+
 
 
 // cleans urls
@@ -39,13 +47,7 @@ export class PuppetController extends BaseController {
     try {
       let url = _urlCheck(req.body.url)
       let filePath = _cleanPath(req.body.filePath)
-      const browser = await puppeteer.launch({headless: true, defaultViewport: null,   args: [
-        '--window-size=1920,1080',
-        "--incognito",
-        "--no-sandbox",
-        "--single-process",
-        "--no-zygote"
-      ]});
+      const browser = await puppeteer.launch(chromeOptions);
       const page = await browser.newPage();
       await page.goto(url);
       page.waitForTimeout(5000)
@@ -65,17 +67,7 @@ export class PuppetController extends BaseController {
     let filePath = _cleanPath(req.body.filePath)
       let url = _urlCheck(req.body.url)
       let socketRoom = req.body.socketRoom
-      const browser = await puppeteer.launch({
-        headless: true,
-        defaultViewport: null,
-           args: [
-           '--window-size=900,900',
-           "--incognito",
-           "--no-sandbox",
-           "--single-process",
-           "--no-zygote"
-          ]
-      });
+      const browser = await puppeteer.launch(chromeOptions);
       const page = await browser.newPage();
        // SECTION Get images from resources
        let rtImages = []
@@ -109,17 +101,7 @@ export class PuppetController extends BaseController {
     let filePath = _cleanPath(req.body.filePath)
     let url = _urlCheck(req.body.url)
     let socketRoom = req.body.socketRoom
-    const backgroundBrowser = await puppeteer.launch({
-      headless: true,
-      defaultViewport: null,
-         args: [
-        '--window-size=900,900',
-        "--incognito",
-        "--no-sandbox",
-        "--single-process",
-        "--no-zygote"
-      ]
-    });
+    const backgroundBrowser = await puppeteer.launch(chromeOptions);
     const page = await backgroundBrowser.newPage();
 
    await page.goto(url, {waitUntil: 'networkidle0'});
@@ -159,11 +141,7 @@ export class PuppetController extends BaseController {
   let filePath = _cleanPath(req.body.filePath)
   let url = _urlCheck(req.body.url)
   let socketRoom = req.body.socketRoom
-  const thumbBrowser = await puppeteer.launch({
-    headless: true,
-    defaultViewport: null,
-       args: ['--window-size=900,900',]
-  });
+  const thumbBrowser = await puppeteer.launch(chromeOptions);
   const page = await thumbBrowser.newPage();
   await page.goto(url)
 
@@ -244,9 +222,7 @@ export class PuppetController extends BaseController {
       let socketRoom = req.body.socketRoom
       let imagesSaved = []
       let imagesFailed = []
-        const browser = await puppeteer.launch({headless: true, defaultViewport: null,   args: [
-          '--window-size=900,900',
-        ]});
+        const browser = await puppeteer.launch(chromeOptions);
         const page = await browser.newPage();
 
 

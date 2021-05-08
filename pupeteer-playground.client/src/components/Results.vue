@@ -1,6 +1,5 @@
 <template>
-  <div v-if="state.loading == null"></div>
-  <div v-else class="Results row rounded-8 justify-content-center p-5 bg-fade-dark my-1 window">
+  <div class="Results row rounded-8 justify-content-center p-5 bg-fade-dark my-1 window">
     <div v-if="!state.error" class="error">
       {{ state.error }}
     </div>

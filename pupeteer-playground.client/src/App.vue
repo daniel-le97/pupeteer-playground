@@ -25,9 +25,9 @@
             <router-view />
           </div>
         </div>
-        <div class="col-md-8">
-          <Results />
-        </div>
+        <transition name="results" tag="div" class="col-md-8">
+          <Results v-if="loading !== null" />
+        </transition>
       </div>
     </div>
   </main>
@@ -52,7 +52,8 @@ export default {
     })
     return {
       appState: computed(() => AppState),
-      mode: computed(() => route.name)
+      mode: computed(() => route.name),
+      loading: computed(() => AppState.loading)
     }
   }
 }
@@ -63,34 +64,11 @@ export default {
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css");
 
 body{
- background-image: url('./assets/img/frame1.png'), url('./assets/img/frame2.png');
- background-repeat: no-repeat, no-repeat;
- background-size: cover;
- background-position: 0 top, 0 bottom;
+ background-image: url('./assets/img/frame1.png'), url('./assets/img/frame2.png'), url('./assets/img/frame1.png'), url('./assets/img/frame2.png'), url('./assets/img/frame1.png'), url('./assets/img/frame2.png'), url('./assets/img/frame1.png'), url('./assets/img/frame2.png');
+ background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+ background-size: 100vw, contain, contain, contain, contain, contain, contain, contain;
+ background-position: 0 top, 0 120vw, 0 240vw, 0 360vw, 0 480vw, 0 600vw, 0 720vw, 0 840vw;
 }
-
-// #app{
-//   perspective: 1px;
-//   height: 100vh;
-//   overflow-x: hidden;
-//   overflow-y: auto;
-// }
-
-// .paralax-layer{
-//   position: absolute;
-//   top: 0;
-//   right: 0;
-//   bottom: 0;
-//   left: 0;
-// }
-
-// .paralax-layer-back{
-//   transform: translateZ(-2px) scale(3);
-// }
-
-// .paralax-layer-deep{
-//   transform: translateZ(-3px) scale(4);
-// }
 
 input{
   border-radius: 4px;
@@ -147,6 +125,18 @@ a:hover {
 
 .window{
   transition: all .5s ease;
+}
+
+// Results Transition
+/* pictures fade in */
+.results-enter-active,
+.results-leave-active {
+  transition: all .4s ease;
+}
+.results-enter-from,
+.results-leave-to {
+  opacity: 0;
+  transform: scaleY(0) translateY(-120px);
 }
 
 // Scroll bar

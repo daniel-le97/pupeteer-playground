@@ -32,9 +32,9 @@
     </div>
   </main>
   <footer>
-    <div class="bg-transparent text-light text-center p-4">
-      Made with 💖 by CodeWorks
-    </div>
+    <small class="bg-transparent text-light text-center p-4">
+      Made with 💖 by Mick Shanny
+    </small>
   </footer>
 </template>
 

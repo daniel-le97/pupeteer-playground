@@ -1,5 +1,5 @@
 <template>
-  <button @click="testData('big')" class="btn btn-outline-warning">
+  <!-- <button @click="testData('big')" class="btn btn-outline-warning">
     add test data big
   </button>
   <button @click="testData('small')" class="btn btn-outline-warning">
@@ -7,7 +7,7 @@
   </button>
   <button @click="testData('smallest')" class="btn btn-outline-warning">
     add test data small
-  </button>
+  </button> -->
   <div class="col-12 text-light">
     enter url
     <input v-model="state.search.url" class="w-100" type="text">

@@ -9,7 +9,6 @@ const path = require('path')
 const chromeOptions = {headless: true, defaultViewport: null,   args: [
   "--incognito",
   "--no-sandbox",
-  "--single-process",
   '--disable-setuid-sandbox',
   "--no-zygote"
 ]}

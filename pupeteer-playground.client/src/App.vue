@@ -1,9 +1,8 @@
 <template>
-  <div class="background1 paralax-layer paralax-layer-back"></div>
   <header>
     <Navbar />
   </header>
-  <main class="paralax">
+  <main class="no-scroll">
     <div class="container-fluid pt-5 home text-light">
       <div class="row justify-content-center h-100 align-content-center p-1">
         <div class="col-md-8">
@@ -32,9 +31,9 @@
     </div>
   </main>
   <footer>
-    <small class="bg-transparent text-light text-center p-4">
+    <div class="bg-transparent text-light text-center p-4">
       Made with 💖 by Mick Shanny
-    </small>
+    </div>
   </footer>
 </template>
 

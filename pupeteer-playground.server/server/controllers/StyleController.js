@@ -3,6 +3,11 @@ import socketService from '../services/SocketService';
 import BaseController from '../utils/BaseController';
 import { logger } from '../utils/Logger';
 
+const chromeOptions = {headless: true, defaultViewport: null,   args: [
+  "--incognito",
+  "--no-sandbox",
+]}
+
 
 
 // cleans urls
@@ -77,11 +82,7 @@ export class StyleController extends BaseController {
       logger.log('steal style', req.body.url)
         let url = _urlCheck(req.body.url)
         let socketRoom = req.body.socketRoom
-        const browser = await puppeteer.launch({
-          headless: false,
-          defaultViewport: null,
-             args: ['--window-size=900,900',]
-        });
+        const browser = await puppeteer.launch(chromeOptions);
         const page = await browser.newPage();
         let styleUrls =[]
         await page.on('response', async response => {
@@ -155,11 +156,7 @@ try {
   logger.log('steal site style', req.body.url)
         let url = _urlCheck(req.body.url)
         let socketRoom = req.body.socketRoom
-        const browser = await puppeteer.launch({
-          headless: false,
-          defaultViewport: null,
-             args: ['--window-size=900,900',]
-        });
+        const browser = await puppeteer.launch(chromeOptions);
         const page = await browser.newPage();
         await page.goto(url, {waitUntil: 'networkidle0', timeout:30000}).catch(err => {logger.log(err), browser.close()})
         let elements = await page.evaluate(()=>{

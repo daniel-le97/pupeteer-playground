@@ -76,8 +76,11 @@ export class PuppetController extends BaseController {
      });
      await page.goto(url, {waitUntil: 'networkidle0'});
      await page.evaluate(() => {
-       return Promise.resolve(window.scrollTo(0,document.body.scrollHeight));
+       return Promise.resolve(window.scrollTo(0,document.body.scrollHeight/2));
    });
+   await page.evaluate(() => {
+    return Promise.resolve(window.scrollTo(0,document.body.scrollHeight));
+});
      await page.waitForTimeout(2000)
        // Get images
        let images = await page.evaluate(() => Array.from(document.images, e =>  e.src));

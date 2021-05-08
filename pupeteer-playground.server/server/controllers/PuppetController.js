@@ -41,6 +41,10 @@ export class PuppetController extends BaseController {
       let filePath = _cleanPath(req.body.filePath)
       const browser = await puppeteer.launch({headless: true, defaultViewport: null,   args: [
         '--window-size=1920,1080',
+        "--incognito",
+        "--no-sandbox",
+        "--single-process",
+        "--no-zygote"
       ]});
       const page = await browser.newPage();
       await page.goto(url);
@@ -64,7 +68,13 @@ export class PuppetController extends BaseController {
       const browser = await puppeteer.launch({
         headless: true,
         defaultViewport: null,
-           args: ['--window-size=900,900',]
+           args: [
+           '--window-size=900,900',
+           "--incognito",
+           "--no-sandbox",
+           "--single-process",
+           "--no-zygote"
+          ]
       });
       const page = await browser.newPage();
        // SECTION Get images from resources
@@ -102,7 +112,13 @@ export class PuppetController extends BaseController {
     const backgroundBrowser = await puppeteer.launch({
       headless: true,
       defaultViewport: null,
-         args: ['--window-size=900,900',]
+         args: [
+        '--window-size=900,900',
+        "--incognito",
+        "--no-sandbox",
+        "--single-process",
+        "--no-zygote"
+      ]
     });
     const page = await backgroundBrowser.newPage();
 

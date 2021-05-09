@@ -1,5 +1,6 @@
 <template>
   <nav class="navbar navbar-expand-lg ">
+    <i class="ra ra-hood"></i>
     <button
       class="navbar-toggler"
       type="button"

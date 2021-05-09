@@ -57,8 +57,8 @@ export default {
 /* Loader  */
 
 .loader {
-    --path: var(--info);
-    --dot: var(--primary);
+    --path: var(--warning);
+    --dot: var(--danger);
     --duration: 3s;
     width: 44px;
     height: 44px;

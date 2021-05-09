@@ -44,7 +44,7 @@ class FirebaseService {
     await Promise.all(
       files.map(async({ name }) => folderRef.child(name).getDownloadURL().then(res => downloadUrls.push(res)))
     )
-    AppState.zipCount = downloadUrls.length
+    AppState.zipCount = downloadUrls.length + 5
     logger.log('urls', downloadUrls)
     const downloadedFiles = []
     await Promise.all(downloadUrls.map(url => fetch(url).then(async(res) => {
@@ -58,6 +58,7 @@ class FirebaseService {
       AppState.zipped += 0.5
     })
     const content = await jszip.generateAsync({ type: 'blob' })
+    AppState.zipped += 5
     saveAs(content, 'test')
   }
 }

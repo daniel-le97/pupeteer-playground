@@ -34,6 +34,8 @@ class FirebaseService {
   }
 
   async downloadFireBase() {
+    AppState.zipCount = 0
+    AppState.zipped = 0
     const folderPath = '/tests/' + AppState.socketUser
     const jszip = new JSZip()
     const folderRef = firebase.storage().ref(folderPath)
@@ -42,22 +44,20 @@ class FirebaseService {
     await Promise.all(
       files.map(async({ name }) => folderRef.child(name).getDownloadURL().then(res => downloadUrls.push(res)))
     )
+    AppState.zipCount = downloadUrls.length
     logger.log('urls', downloadUrls)
     const downloadedFiles = []
     await Promise.all(downloadUrls.map(url => fetch(url).then(async(res) => {
       downloadedFiles.push(await res.blob())
+      AppState.zipped += 0.5
     }).catch(err => logger.error(err))))
 
     logger.warn('blobs', downloadedFiles)
-    downloadedFiles.forEach((file, i) => jszip.file(files[i].name, file))
+    downloadedFiles.forEach((file, i) => {
+      jszip.file(files[i].name, file)
+      AppState.zipped += 0.5
+    })
     const content = await jszip.generateAsync({ type: 'blob' })
-    // const fileHandle = await window.showSaveFilePicker({
-    //   types: [{
-    //     description: 'zip file',
-    //     accept: { 'zip/archive': ['.zip'] }
-    //   }]
-    // })
-    // logger.log(fileHandle)
     saveAs(content, 'test')
   }
 }

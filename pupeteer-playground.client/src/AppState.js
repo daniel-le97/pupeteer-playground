@@ -15,6 +15,8 @@ export const AppState = reactive({
   },
   error: null,
   loading: null,
+  zipCount: 0,
+  zipped: 0,
   working: false,
   actionQue: [],
   socketUser: '',

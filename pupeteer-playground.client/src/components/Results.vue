@@ -19,6 +19,8 @@
       <div v-if="state.loading === 0 && !state.working" class="row justify-content-center">
         all done
         <button class="btn btn-block mbtn-light mt-2" @click="downloadResults">
+          <div class="loading-bar " :style="`width:${downloadPercent(state.zipStatus)}%;`">
+          </div>
           download results
         </button>
       </div>
@@ -40,6 +42,7 @@ export default {
       mode: computed(() => route.name),
       loading: computed(() => AppState.loading),
       working: computed(() => AppState.working),
+      zipStatus: computed(() => AppState.zipped),
       error: computed(() => AppState.error)
 
     })
@@ -47,6 +50,9 @@ export default {
       state,
       async downloadResults() {
         await firebaseService.downloadFireBase()
+      },
+      downloadPercent(zip) {
+        return Math.round((AppState.zipped / AppState.zipCount) * 100)
       }
     }
   }
@@ -54,6 +60,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.loading-bar{
+  background: #7fcec983;
+  z-index: -1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: all .2s ease;
+  height: 100%;
+}
+
 /* Loader  */
 
 .loader {

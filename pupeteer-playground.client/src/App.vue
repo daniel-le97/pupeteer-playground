@@ -31,8 +31,8 @@
     </div>
   </main>
   <footer>
-    <div class="bg-transparent text-light text-center p-4">
-      Made with 💖 by Mick Shanny
+    <div class="bg-transparent text-primary text-center p-4">
+      Made with <i class="bi bi-heart"></i> by Mick Shanny
     </div>
   </footer>
 </template>

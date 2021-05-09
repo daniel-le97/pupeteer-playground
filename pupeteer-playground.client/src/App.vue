@@ -63,10 +63,10 @@ export default {
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css");
 
 body{
- background-image: url('./assets/img/frame1.png'), url('./assets/img/frame2.png'), url('./assets/img/frame1.png'), url('./assets/img/frame2.png'), url('./assets/img/frame1.png'), url('./assets/img/frame2.png'), url('./assets/img/frame1.png'), url('./assets/img/frame2.png');
- background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
- background-size: 100vw, contain, contain, contain, contain, contain, contain, contain;
- background-position: 0 top, 0 125vw, 0 245vw, 0 365vw, 0 485vw, 0 605vw, 0 725vw, 0 845vw;
+ background-image: url('./assets/img/frame1.png'), url('./assets/img/frame2.png'), url('./assets/img/frame1.png'), url('./assets/img/frame2.png'), url('./assets/img/frame1.png'), url('./assets/img/frame2.png'), url('./assets/img/frame1.png'), url('./assets/img/frame2.png'), url('./assets/img/frame1.png');
+ background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+ background-size: 100vw, contain, contain, contain, contain, contain, contain, contain, contain;
+ background-position: 0 top, 0 125vw, 0 245vw, 0 365vw, 0 485vw, 0 605vw, 0 725vw, 0 845vw, 0 965vw;
 }
 
 input{

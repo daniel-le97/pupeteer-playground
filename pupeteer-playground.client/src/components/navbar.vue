@@ -1,6 +1,5 @@
 <template>
   <nav class="navbar navbar-expand-lg ">
-    <i class="ra ra-hood"></i>
     <button
       class="navbar-toggler"
       type="button"
@@ -12,6 +11,7 @@
     >
       <span class="navbar-toggler-icon"></span>
     </button>
+    <img class="pt-2" src="../assets/img/Looter.png" alt="" srcset="" style="width: 3em;">
     <div class="collapse navbar-collapse" id="navbarText">
       <span class="navbar-text d-flex justify-content-end fixed-top p-3">
         <button class="btn btn-outline-dark rounded-pill" @click="login" v-if="!user.isAuthenticated">Login</button>

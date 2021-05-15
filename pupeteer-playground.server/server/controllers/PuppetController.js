@@ -2,7 +2,9 @@ import puppeteer from 'puppeteer';
 import { stlService } from '../services/SaveLocalService';
 import socketService from '../services/SocketService';
 import BaseController from '../utils/BaseController';
+import { cleanPath, cleanUrl, urlCheck } from '../utils/Cleaners';
 import { logger } from '../utils/Logger';
+
 const fs = require('fs')
 const path = require('path')
 
@@ -11,22 +13,6 @@ const chromeOptions = {headless: true, defaultViewport: null,   args: [
   "--no-sandbox",
 ]}
 
-
-
-// cleans urls
-function _cleanUrl(str){
-  let staged = str.split('://')[1].split('.')
-  return staged[0] + '.' + staged[1]
-}
-function _urlCheck(str =''){
-  let out = str.startsWith('https://',0)
-  return out ? str : 'https://'+ str
-}
-function _cleanPath(str=''){
-  let out = ''
-  if(!str.endsWith('/')) out += '/'
-  return out
-}
 
 
 export class PuppetController extends BaseController {
@@ -42,14 +28,14 @@ export class PuppetController extends BaseController {
 
   async getSiteImage(req, res, next){
     try {
-      let url = _urlCheck(req.body.url)
-      let filePath = _cleanPath(req.body.filePath)
+      let url = urlCheck(req.body.url)
+      let filePath = cleanPath(req.body.filePath)
       const browser = await puppeteer.launch(chromeOptions);
       const page = await browser.newPage();
       await page.goto(url);
       page.waitForTimeout(5000)
       await page.evaluate(() => document.body.style.background = 'transparent')
-      await page.screenshot({ path: filePath + _cleanUrl(url) +'.png', fullPage: true, omitBackground: true});
+      await page.screenshot({ path: filePath + cleanUrl(url) +'.png', fullPage: true, omitBackground: true});
       await browser.close();
       res.send('screen shot of ' + url + ' taken')
     } catch (error) {
@@ -61,8 +47,8 @@ export class PuppetController extends BaseController {
 
   async scrapeImageTags(req,res,next){
     logger.log('image tags', req.body.url)
-    let filePath = _cleanPath(req.body.filePath)
-      let url = _urlCheck(req.body.url)
+    let filePath = cleanPath(req.body.filePath)
+      let url = urlCheck(req.body.url)
       let socketRoom = req.body.socketRoom
       const browser = await puppeteer.launch(chromeOptions);
       const page = await browser.newPage();
@@ -89,7 +75,7 @@ export class PuppetController extends BaseController {
         browser.close()
         // Downloading
        for (let i = 0; i < images.length; i++) {
-        let image = await stlService.download(images[i],_cleanUrl(url), filePath, i)
+        let image = await stlService.download(images[i],cleanUrl(url), filePath, i)
         socketService.messageRoom(socketRoom, 'download:image', image)
     }
     socketService.messageRoom(socketRoom, 'action:done', {})
@@ -98,8 +84,8 @@ export class PuppetController extends BaseController {
 
   async scrapeBackgrounds(req, res,next){
     logger.log('backgrounds', req.body.url)
-    let filePath = _cleanPath(req.body.filePath)
-    let url = _urlCheck(req.body.url)
+    let filePath = cleanPath(req.body.filePath)
+    let url = urlCheck(req.body.url)
     let socketRoom = req.body.socketRoom
     const backgroundBrowser = await puppeteer.launch(chromeOptions);
     const page = await backgroundBrowser.newPage();
@@ -129,7 +115,7 @@ export class PuppetController extends BaseController {
      backgroundBrowser.close()
       // Downloading
      for (let i = 0; i < bgImages.length; i++) {
-      let image = await stlService.download(bgImages[i],_cleanUrl(url), filePath, i)
+      let image = await stlService.download(bgImages[i],cleanUrl(url), filePath, i)
       socketService.messageRoom(socketRoom, 'download:image', image)
   }
   socketService.messageRoom(socketRoom, 'action:done', {})
@@ -138,8 +124,8 @@ export class PuppetController extends BaseController {
 
  async scrapeThumbnails(req, res, next){
   logger.log('thumbnails', req.body.url)
-  let filePath = _cleanPath(req.body.filePath)
-  let url = _urlCheck(req.body.url)
+  let filePath = cleanPath(req.body.filePath)
+  let url = urlCheck(req.body.url)
   let socketRoom = req.body.socketRoom
   const thumbBrowser = await puppeteer.launch(chromeOptions);
   const page = await thumbBrowser.newPage();
@@ -178,7 +164,7 @@ export class PuppetController extends BaseController {
           }
         })
         if(maxSize > 180000){
-          let image = await stlService.download(bigImage,_cleanUrl(url), filePath, imageLinks.indexOf(link))
+          let image = await stlService.download(bigImage,cleanUrl(url), filePath, imageLinks.indexOf(link))
           socketService.messageRoom(socketRoom, 'download:image', image)
         }
         await tab.close()
@@ -217,8 +203,8 @@ export class PuppetController extends BaseController {
 
   async scrapeImages(req, res,next ){
     try {
-      let filePath = _cleanPath(req.body.filePath)
-      let url = _urlCheck(req.body.url)
+      let filePath = cleanPath(req.body.filePath)
+      let url = urlCheck(req.body.url)
       let socketRoom = req.body.socketRoom
       let imagesSaved = []
       let imagesFailed = []
@@ -332,7 +318,7 @@ await page.waitForTimeout((openTabs * 3000))
       let allImages = [...images, ...bgImages,...thumbImages]
       for (let i = 0; i < allImages.length; i++) {
         logger.log("downloading")
-        let image = await stlService.download(allImages[i],_cleanUrl(url), filePath, i)
+        let image = await stlService.download(allImages[i],cleanUrl(url), filePath, i)
         if(image.status == 'ok') {imagesSaved.push(image)}else{
           imagesFailed.push(image)
         }

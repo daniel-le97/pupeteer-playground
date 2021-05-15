@@ -3,7 +3,7 @@ import { logger } from '../utils/Logger'
 import { api } from './AxiosService'
 
 class StyleService {
-  async stealStyleSheets(search) {
+  async scrapeStyle(search) {
     try {
       const res = await api.put('api/style/sheet', search)
       logger.log(res.data)
@@ -12,9 +12,9 @@ class StyleService {
     }
   }
 
-  async stealSiteStyle(search) {
+  async scrapeColors(search) {
     try {
-      const res = await api.put('api/style/site', search)
+      const res = await api.put('api/style/color', search)
       logger.log(res.data)
     } catch (err) {
       logger.error(err)

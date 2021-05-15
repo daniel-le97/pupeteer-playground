@@ -1,6 +1,7 @@
 import puppeteer from 'puppeteer';
 import socketService from '../services/SocketService';
 import BaseController from '../utils/BaseController';
+import { calculatePercent, hexCode, urlCheck } from '../utils/Cleaners';
 import { logger } from '../utils/Logger';
 
 const chromeOptions = {headless: true, defaultViewport: null,   args: [
@@ -8,79 +9,18 @@ const chromeOptions = {headless: true, defaultViewport: null,   args: [
   "--no-sandbox",
 ]}
 
-
-
-// cleans urls
-function _cleanUrl(str){
-  let staged = str.split('://')[1].split('.')
-  return staged[0] + '.' + staged[1]
-}
-function _urlCheck(str =''){
-  let out = str.startsWith('https://',0)
-  return out ? str : 'https://'+ str
-}
-function _cleanPath(str=''){
-  let out = ''
-  if(!str.endsWith('/')) out += '/'
-  return out
-}
-
-function _hexCode(dict){
-  let hexes ={}
-  for(let key in dict){
-    let value = dict[key]
-    let a;
-    let isPercent;
-    let rgb = key.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i),
-    alpha = (rgb && rgb[4] || "").trim(),
-    hex = rgb ?
-    (+rgb[1] | 1 << 8).toString(16).slice(1) +
-    (+rgb[2] | 1 << 8).toString(16).slice(1) +
-    (+rgb[3] | 1 << 8).toString(16).slice(1) : key;
-
-  if (alpha !== "") {
-    a = alpha;
-  } else {
-    a = '01';
-  }
-  // multiply before convert to HEX
-  a = ((+a * 255) | 1 << 8).toString(16).slice(1)
-  hex = '#'+hex + a;
-  hexes[hex] = value;
-  }
-  return hexes;
-}
-
-function _calculatePercent(dict = {}){
-  let total = 0
-  let ignores = ['rgb(255, 255, 255)', 'rgb(0, 0, 0)','rgba(0, 0, 0, 0)', '#ffffffff', '#000000ff', '#00000000' ]
-  for (const key in dict) {
-    if(!ignores.includes(key)){
-      total += dict[key];
-    }
-  }
-  for (const key in dict){
-    if(!ignores.includes(key)){
-    dict[key] = ((dict[key]/total)*100).toFixed(2)
-    } else{
-      dict[key]= '0'
-    }
-  }
-  return dict
-}
-
 export class StyleController extends BaseController {
   constructor() {
     super('api/style')
     logger.log('style controller registered')
     this.router
       .put('/sheet', this.getStyleSheet)
-      .put('/site', this.getSiteStyle)
+      .put('/color', this.getColors)
   }
   async getStyleSheet(req, res, next) {
     try {
       logger.log('steal style', req.body.url)
-        let url = _urlCheck(req.body.url)
+        let url = urlCheck(req.body.url)
         let socketRoom = req.body.socketRoom
         const browser = await puppeteer.launch(chromeOptions);
         const page = await browser.newPage();
@@ -104,17 +44,21 @@ export class StyleController extends BaseController {
                   let lastIndex = 0
                   for(let i =0; i < rawStyle.length; i++){
                     let char = rawStyle[i]
-                    let brackets = []
+                    let brackets = 0
                     switch(char){
                     case '{':
-                      brackets.push('{')
+                      brackets++
                       break;
                     case '}':
-                      brackets.pop()
-                      if(brackets.length ==0){
-                        let rule = rawStyle.slice(lastIndex, i+1)
-                        let selector = rule.slice(0,rule.indexOf('{'))
+                      brackets--
+                      if(brackets == 0){
+                        let rule = rawStyle.slice(lastIndex, i).trim()
+                        let selector = rule.slice(0,rule.indexOf('{')).trim()
+                        if(selector.includes('@')){
+                          logger.log(selector, rule)
+                        }
                         let style = rule.slice(rule.indexOf('{')+1).split(';').map(e => e+= ';')
+                        style
                         if (allStyles[selector]){
                           allStyles[selector] = [...allStyles[selector],...style]
                         } else {
@@ -151,16 +95,16 @@ export class StyleController extends BaseController {
     }
   }
 
-  async getSiteStyle(req,res, next){
+  async getColors(req,res, next){
 try {
   logger.log('steal site style', req.body.url)
-        let url = _urlCheck(req.body.url)
+        let url = urlCheck(req.body.url)
         let socketRoom = req.body.socketRoom
         const browser = await puppeteer.launch(chromeOptions);
         const page = await browser.newPage();
         await page.goto(url, {waitUntil: 'networkidle0', timeout:30000}).catch(err => {logger.log(err), browser.close()})
         let elements = await page.evaluate(()=>{
-          let elementNames = ["div", "body","a", "b", "p", "h1", "h2","h3","h4","h5", "span", "ul", "li"] // Put all the tags you want bg images for here
+          let elementNames = ["div", "body","a", "b", "p", "h1", "h2","h3","h4","h5", "span", "ul", "li", "button", "article", "main", "header", "footer"] // Put all the tags you want colors for here
           let elementStyles= {}
           elementNames.forEach( function(tagName) {
             let tags = document.querySelectorAll(tagName);
@@ -168,9 +112,9 @@ try {
               let styles = getComputedStyle(elm)
               for(let key in styles){
                 let style = styles[key]
-                if( style == 'background-color') {
+                if( style == 'background-color' || style == 'color') {
                   let color = styles.getPropertyValue(style)
-                  if(elementStyles[color]){
+                  if(elementStyles[color] ){
                     elementStyles[color] += 1
                   } else {
                     elementStyles[color] = 1
@@ -181,8 +125,9 @@ try {
             });
             return elementStyles
           })
-          elements = _hexCode(elements)
-          elements = _calculatePercent(elements)
+          logger.log(elements)
+          elements = hexCode(elements)
+          elements = calculatePercent(elements)
           logger.warn(elements)
           browser.close()
           res.send({message: 'done', colors: elements})

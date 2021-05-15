@@ -1,13 +1,15 @@
 <template>
-  <!-- <button @click="testData('big')" class="btn btn-outline-warning">
-    add test data big
-  </button>
-  <button @click="testData('small')" class="btn btn-outline-warning">
-    add test data small
-  </button>
-  <button @click="testData('smallest')" class="btn btn-outline-warning">
-    add test data small
-  </button> -->
+  <div v-if="state.debug">
+    <button @click="testData('big')" class="btn btn-outline-warning">
+      add test data big
+    </button>
+    <button @click="testData('small')" class="btn btn-outline-warning">
+      add test data small
+    </button>
+    <button @click="testData('smallest')" class="btn btn-outline-warning">
+      add test data small
+    </button>
+  </div>
   <div class="col-12 text-light">
     enter url
     <input v-model="state.search.url" class="w-100" type="text">
@@ -69,34 +71,30 @@ export default {
         filePath: '',
         socketRoom: computed(() => AppState.socketRoom)
       },
-      mode: '',
-      pictures: computed(() => AppState.pictureResults)
-
+      pictures: computed(() => AppState.pictureResults),
+      debug: false
     })
-    function getScreenCap() {
-      puppetService.getScreenshot(state.search)
-    }
-    function getScrape() {
-      if (state.clearResults === true) puppetService.clearResults()
-      for (const key in state.options) {
-        if (state.options[key]) {
-          state.mode = 'picture scrape'
-          const payload = {
-            service: 'puppetService',
-            action: key,
-            search: state.search
-          }
-          queService.addAction(payload)
-        }
-      }
-    }
     return {
       state,
-      getScreenCap,
-      getScrape,
       testData(size) {
         state.mode = 'picture scrape'
         puppetService.testData(size)
+      },
+      getScrape() {
+        if (state.clearResults === true) puppetService.clearResults()
+        for (const key in state.options) {
+          if (state.options[key]) {
+            const payload = {
+              service: 'puppetService',
+              action: key,
+              search: state.search
+            }
+            queService.addAction(payload)
+          }
+        }
+      },
+      getScreenCap() {
+        puppetService.getScreenshot(state.search)
       }
     }
   },
@@ -154,7 +152,5 @@ export default {
   opacity: 0;
   transform: translateY(5px);
 }
-
-// animated flex
 
 </style>

@@ -39,7 +39,7 @@
 
 <script>
 import { AppState } from '../AppState'
-import { computed, reactive, onMounted } from 'vue'
+import { computed, reactive } from 'vue'
 import { queService } from '../services/QueService'
 import $ from 'jquery'
 export default {

@@ -53,7 +53,7 @@ export class StyleController extends BaseController {
             })
 
         res.send({
-          message: 'Looks like we found some classes, we are compiling them, this will take about FIXME seconds',
+          message: 'Looks like we found some classes, we are compiling them, this will take about FIXME seconds', allStyles
         })
         // SECTION wait for tabs
         await page.waitForTimeout( 3000)

@@ -24,68 +24,40 @@ export class StyleController extends BaseController {
         let socketRoom = req.body.socketRoom
         const browser = await puppeteer.launch(chromeOptions);
         const page = await browser.newPage();
-        let styleUrls =[]
-        await page.on('response', async response => {
-          const matches = /.*\.(css)$/.exec(response.url())
-          if(matches != null){styleUrls.push(matches[0])}
-        });
-        await page.goto(url,{waitUntil: 'networkidle0', timeout:10000})
+        page.on('console', msg => console.log('PAGE LOG:', msg.text));
+        await page.goto(url,{waitUntil: 'networkidle0', timeout:30000})
+        let allStyles = await page.evaluate(async ()=>{
+            let elementNames = ["div", "body","a", "b", "p", "h1", "h2","h3","h4","h5", "span", "ul", "li", "button", "article", "main", "header", "footer"] // Put all the tags you want colors for here
 
-        let allStyles ={}
-        async function markFix(){
-          return new Promise(async (resolve, reject)=>{
-            try {
-               (async function(){
-                for await(let link of styleUrls){
-                  logger.log("navigating to", link)
-             let tab = await browser.newPage().catch(err => {logger.error(err);return})
-             await tab.goto(link, {waitUntil: "networkidle0", timeout:5000}).catch(err=> logger.error(err))
-                  let rawStyle = await tab.$eval('pre', elm => elm.innerText)
-                  let lastIndex = 0
-                  for(let i =0; i < rawStyle.length; i++){
-                    let char = rawStyle[i]
-                    let brackets = 0
-                    switch(char){
-                    case '{':
-                      brackets++
-                      break;
-                    case '}':
-                      brackets--
-                      if(brackets == 0){
-                        let rule = rawStyle.slice(lastIndex, i).trim()
-                        let selector = rule.slice(0,rule.indexOf('{')).trim()
-                        if(selector.includes('@')){
-                          logger.log(selector, rule)
-                        }
-                        let style = rule.slice(rule.indexOf('{')+1).split(';').map(e => e+= ';')
-                        style
-                        if (allStyles[selector]){
-                          allStyles[selector] = [...allStyles[selector],...style]
-                        } else {
-                          allStyles[selector] = style
-                        }
-                        lastIndex = i+1
-                      }
-                      break;
-                    }
-                  }
-                  await tab.close()
+            let elementStyles= []
+            let sheets = document.styleSheets
+            for(let i =0; i < sheets.length; i++){
+              let sheet = sheets[i]
+              for (let j = 0; j < sheet.cssRules.length; j++){
+                let rule = sheet.cssRules[j]
+                elementStyles.push(rule.cssText)
               }
-               })();
-            resolve()
-          } catch (error) {
-            reject(error)
-          }
-        })
-        }
+            }
+
+            // elementNames.forEach( function(tagName) {
+            //   let tags = document.querySelectorAll(tagName);
+            //   tags.forEach(elm => {
+            //     let styles = elm.classList
+            //     for(let key in styles){
+            //       let style = styles[key]
+            //       elementStyles.push({[style]: document.styleSheets})
+            //     }
+            //   })
+            //   });
+              return elementStyles
+            })
 
         res.send({
-          message: 'Looks like we found ' + styleUrls.length + ' style sheets, we are compiling them, this will take about ' +(styleUrls.length * 3) + ' seconds',
+          message: 'Looks like we found some classes, we are compiling them, this will take about FIXME seconds',
         })
         // SECTION wait for tabs
-        await markFix()
-        logger.log('waiting', styleUrls.length* 3)
-        await page.waitForTimeout(styleUrls.length * 3000)
+        await page.waitForTimeout( 3000)
+        logger.warn(allStyles)
         socketService.messageRoom(socketRoom, 'style:sheet', allStyles)
         socketService.messageRoom(socketRoom, 'action:done')
         // grab stylesheets

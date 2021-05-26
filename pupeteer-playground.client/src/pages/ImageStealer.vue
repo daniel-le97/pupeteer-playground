@@ -19,7 +19,7 @@
           Scrape Images
         </div>
       </button>
-      <div class="cog p-1 pl-2 pr-0 ml-2 pb-2" data-toggle="collapse" data-target="#settings" v-tooltip:right="'configure'">
+      <div class="cog p-1 pl-2 pr-0 ml-2 pb-2" data-toggle="collapse" data-target="#settings" v-tooltip:right="'configure heist'">
         <i class="fa fa-cog mr-3" aria-hidden="true"></i>
       </div>
       <div class="col-12">
@@ -87,7 +87,8 @@ export default {
             const payload = {
               service: 'puppetService',
               action: key,
-              search: state.search
+              search: state.search,
+              options: {}
             }
             queService.addAction(payload)
           }

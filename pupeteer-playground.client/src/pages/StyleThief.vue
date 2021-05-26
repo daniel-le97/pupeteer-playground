@@ -8,7 +8,7 @@
           Steal Style
         </div>
       </button>
-      <div class="cog p-1 pl-2 pr-0 ml-2 pb-2" data-toggle="collapse" data-target="#settings" v-tooltip:right="'configure'">
+      <div class="cog p-1 pl-2 pr-0 ml-2 pb-2" data-toggle="collapse" data-target="#settings" v-tooltip:right="'configure heist'">
         <i class="fa fa-cog mr-3" aria-hidden="true"></i>
       </div>
       <div class="col-12">
@@ -17,13 +17,13 @@
             Main colors of the page
           </div>
           <div class="col-3 py-2 d-flex align-items-center">
-            <Toggle :bool="state.options.scrapeColors" @click="state.options.scrapeColors = !state.options.scrapeColors" />
+            <Toggle :bool="state.options.scrapeColors.elements" @click="state.options.scrapeColors.elements = !state.options.scrapeColors.elements" />
           </div>
           <div class="col-9 col-md-7  py-2">
             Include text colors in the heist
           </div>
           <div class="col-3 py-2 d-flex align-items-center">
-            <Toggle :bool="state.options.scrapeTextColor" @click="state.options.scrapeTextColor = !state.options.scrapeTextColor" />
+            <Toggle :bool="state.options.scrapeColors.text" @click="state.options.scrapeColors.text = !state.options.scrapeColors.text" />
           </div>
           <div class="col-9 col-md-7  py-2">
             Steal style sheet
@@ -46,7 +46,7 @@ export default {
   name: 'StyleThief',
   setup() {
     const state = reactive({
-      options: { scrapeColors: true, scrapeTextColor: false, scrapeStyle: false },
+      options: { scrapeColors: { elements: true, text: false }, scrapeStyle: false },
       search: {
         url: '',
         filePath: '',
@@ -62,12 +62,12 @@ export default {
             const payload = {
               service: 'styleService',
               action: key,
-              search: state.search
+              search: state.search,
+              options: state.options[key]
             }
             queService.addAction(payload)
           }
         }
-        queService.nextAction()
       }
     }
   },
@@ -85,5 +85,19 @@ export default {
 </script>
 
 <style scoped>
+
+.cog:hover .fa-cog{
+    animation: rotate-btn 1s linear infinite;
+  -webkit-animation: rotate-btn 1s linear infinite;
+}
+
+@keyframes rotate-btn {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
 
 </style>

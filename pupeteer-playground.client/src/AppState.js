@@ -12,7 +12,8 @@ export const AppState = reactive({
     found: 0
   },
   styleResults: {
-    colors: []
+    colors: [],
+    styles: {}
   },
   error: null,
   loading: null,

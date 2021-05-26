@@ -39,6 +39,7 @@ class SocketService extends SocketHandler {
   //  STYLES ---------------
   styleSheets(payload) {
     logger.warn(payload)
+    styleService.foundStyles(payload)
   }
 
   foundColors(payload) {

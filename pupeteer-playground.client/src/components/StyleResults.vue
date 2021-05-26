@@ -13,6 +13,27 @@
     >
     </div>
   </div>
+  <div class="col-12 text-light bg-fade-light rounded-8 mt-3 py-3">
+    <div class="row">
+      <div class="col-6">
+        There are about <span class="text-success">{{ Object.keys(state.styles).length }}</span> styles being used.
+      </div>
+      <div class="col-6 text-right">
+        <button class="btn mbtn-light mt-1" v-tooltip:left="'copy all'">
+          <i class="bi bi-clipboard"></i>
+        </button>
+      </div>
+      <div class="col-12 " v-for="(style, k) in state.styles" :key="k">
+        <b class="text-secondary">{{ k }} {</b>
+        <div class="text-light" v-for="(rule, r) in style" :key="r">
+          <span class="text-warning">{{ rule.split(':')[0] }} :</span> {{ rule.split(':')[1] }}
+          <br>
+        </div>
+        <b class="text-secondary">}</b>
+        <hr>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -26,6 +47,7 @@ export default {
   setup() {
     const state = reactive({
       colors: computed(() => AppState.styleResults.colors),
+      styles: computed(() => AppState.styleResults.styles),
       message: computed(() => AppState.imageResults.message),
       error: computed(() => AppState.imageResults.error),
       loading: computed(() => AppState.loading)
@@ -71,10 +93,12 @@ export default {
 
 .color-block{
   height:6vh;
-  transition: all ease .2s;
+  transition: all ease-out .2s;
   color: transparent;
 }
 .color-block:hover{
+  z-index: 1;
+  transform: scale(1.1);
   color: var(--light);
 }
 

@@ -60,3 +60,14 @@ export function generateId() {
   }
   return genderatedCode.join('')
 }
+
+export function generateParams(object) {
+  let params = ''
+  if (object) {
+    params += '?'
+    for (const key in object) {
+      params += key + '=' + object[key] + '&'
+    }
+  }
+  return params
+}

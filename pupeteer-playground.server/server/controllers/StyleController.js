@@ -106,6 +106,7 @@ export class StyleController extends BaseController {
                 selectors=[...elems[i].classList, ...selectors]
               }
             })
+            // mashes all into one array, keeps #(id targets) and @(media/ animation rules)
             return [...selectors.map(s => '.' + s), ...elementNames]
             })
             logger.log('element classes',elementClasses)
@@ -136,13 +137,15 @@ export class StyleController extends BaseController {
   // SECTION get colors
   async getColors(req,res, next){
 try {
-  logger.log('steal site style', req.body.url)
+  logger.log('steal site style', req.body.url, req.query)
         let url = urlCheck(req.body.url)
         let socketRoom = req.body.socketRoom
         const browser = await puppeteer.launch(chromeOptions);
         const page = await browser.newPage();
         await page.goto(url, {waitUntil: 'networkidle0', timeout:30000}).catch(err => {logger.log(err), browser.close()})
-        let elements = await page.evaluate(()=>{
+        let query = req.query
+        let elements = await page.evaluate((query)=>{
+
           let elementNames = ["div", "body","a", "b", "p", "h1", "h2","h3","h4","h5", "span", "ul", "li", "button", "article", "main", "header", "footer"] // Put all the tags you want colors for here
           let elementStyles= {}
           elementNames.forEach( function(tagName) {
@@ -151,19 +154,19 @@ try {
               let styles = getComputedStyle(elm)
               for(let key in styles){
                 let style = styles[key]
-                if( style == 'background-color' || style == 'color') {
-                  let color = styles.getPropertyValue(style)
-                  if(elementStyles[color] ){
-                    elementStyles[color] += 1
-                  } else {
-                    elementStyles[color] = 1
-                  }
+                  if( (style == 'background-color' && query.elements == 'true') || (style == 'color' && query.text == 'true')) {
+                    let color = styles.getPropertyValue(style)
+                    if(elementStyles[color] ){
+                      elementStyles[color] += 1
+                    } else {
+                      elementStyles[color] = 1
+                    }
                 }
               }
             })
             });
             return elementStyles
-          })
+          }, query)
           logger.log(elements)
           elements = hexCode(elements)
           elements = calculatePercent(elements)

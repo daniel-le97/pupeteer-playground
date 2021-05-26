@@ -21,7 +21,7 @@ class QueService {
       AppState.working = true
       const action = AppState.actionQue.shift()
       logger.log('[Performing Action]', action)
-      services[action.service][action.action](action.search)
+      services[action.service][action.action](action.search, action.options)
     } else {
       AppState.working = false
       logger.log('[All Acitons Complete]')

@@ -1,4 +1,5 @@
 import { AppState } from '../AppState'
+import { generateParams } from '../utils/Generators'
 import { logger } from '../utils/Logger'
 import { api } from './AxiosService'
 
@@ -12,9 +13,9 @@ class StyleService {
     }
   }
 
-  async scrapeColors(search) {
+  async scrapeColors(search, options) {
     try {
-      const res = await api.put('api/style/color', search)
+      const res = await api.put('api/style/color' + generateParams(options), search)
       logger.log(res.data)
     } catch (err) {
       logger.error(err)
@@ -25,6 +26,10 @@ class StyleService {
 
   foundColors(colors) {
     AppState.styleResults.colors = colors
+  }
+
+  foundStyles(styles) {
+    AppState.styleResults.styles = styles
   }
 }
 

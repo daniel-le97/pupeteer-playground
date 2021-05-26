@@ -25,7 +25,7 @@
       </div>
       <div :id="'id'+k" class="col-12 " v-for="(style, k) in state.styles" :key="k" @click="copyStyle('id'+k)">
         <div class="row ">
-          <b class="text-secondary col-11">{{ k }} {</b> <span class="text-right text-fade cursor col-1"><i class="bi bi-clipboard" v-tooltop:left="'copy'"></i></span>
+          <b class="text-secondary col-11">{{ k }} {</b> <span class="text-right text-fade cursor col-1"><i class="bi bi-clipboard" v-tooltip:left="'copy'"></i></span>
         </div>
         <div class="text-light" v-for="(rule, r) in style" :key="r">
           <span class="text-warning">{{ rule.split(':')[0] }} :</span> {{ rule.split(':')[1] }}

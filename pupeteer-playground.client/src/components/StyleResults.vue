@@ -14,17 +14,19 @@
     </div>
   </div>
   <div class="col-12 text-light bg-fade-light rounded-8 mt-3 py-3">
-    <div class="row">
-      <div class="col-6">
+    <div class="row align-items-center" id="allStyles">
+      <div class="col-6 my-3">
         There are about <span class="text-success">{{ Object.keys(state.styles).length }}</span> styles being used.
       </div>
       <div class="col-6 text-right">
-        <button class="btn mbtn-light mt-1" v-tooltip:left="'copy all'">
+        <button class="btn mbtn-light mt-1" v-tooltip:left="'copy all'" @click="copyStyle('allStyles')">
           <i class="bi bi-clipboard"></i>
         </button>
       </div>
-      <div class="col-12 " v-for="(style, k) in state.styles" :key="k">
-        <b class="text-secondary">{{ k }} {</b>
+      <div :id="'id'+k" class="col-12 " v-for="(style, k) in state.styles" :key="k" @click="copyStyle('id'+k)">
+        <div class="row ">
+          <b class="text-secondary col-11">{{ k }} {</b> <span class="text-right text-fade cursor col-1"><i class="bi bi-clipboard" v-tooltop:left="'copy'"></i></span>
+        </div>
         <div class="text-light" v-for="(rule, r) in style" :key="r">
           <span class="text-warning">{{ rule.split(':')[0] }} :</span> {{ rule.split(':')[1] }}
           <br>
@@ -67,6 +69,11 @@ export default {
       copyColor(color) {
         navigator.clipboard.writeText(color)
         notification.toast('color copied', 'success', 'top-right', 2000, false)
+      },
+      copyStyle(elementId) {
+        const element = document.getElementById(elementId)
+        navigator.clipboard.writeText(element.innerText)
+        notification.toast('Style Copied', 'success', 'top-right', 2000, false)
       }
     }
   },

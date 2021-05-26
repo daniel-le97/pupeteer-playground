@@ -103,6 +103,19 @@ a:hover {
  min-height: 100%;
 }
 
+.cursor{
+  cursor: pointer;
+}
+
+.text-fade{
+color: rgba(212, 212, 212, 0.178);
+transition: all ease .2s;
+}
+
+.text-fade:hover{
+color: rgba(212, 212, 212, 0.562);
+}
+
 .bg-fade-dark{
   background:#1e1e1e80;
   backdrop-filter: blur(5px);

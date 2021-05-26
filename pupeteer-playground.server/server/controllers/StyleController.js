@@ -107,7 +107,7 @@ export class StyleController extends BaseController {
               }
             })
             // mashes all into one array, keeps #(id targets) and @(media/ animation rules)
-            return [...selectors.map(s => '.' + s), ...elementNames]
+            return [...selectors.map(s => '.' + s), ...elementNames, '#']
             })
             logger.log('element classes',elementClasses)
 

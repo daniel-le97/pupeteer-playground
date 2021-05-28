@@ -1,5 +1,5 @@
 <template>
-  <header>
+  <header class="container-fluid sticky-top">
     <Navbar />
   </header>
   <main class="no-scroll">

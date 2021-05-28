@@ -137,7 +137,7 @@ export class StyleController extends BaseController {
   // SECTION get colors
   async getColors(req,res, next){
 try {
-  logger.log('steal site style', req.body.url, req.query)
+  logger.log('steal site color', req.body.url, req.query)
         let url = urlCheck(req.body.url)
         let socketRoom = req.body.socketRoom
         const browser = await puppeteer.launch(chromeOptions);

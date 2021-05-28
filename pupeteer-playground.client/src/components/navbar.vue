@@ -1,6 +1,6 @@
 <template>
-  <nav class="navbar navbar-expand-lg ">
-    <button
+  <nav class="navbar navbar-expand-lg">
+    <!-- <button
       class="navbar-toggler"
       type="button"
       data-toggle="collapse"
@@ -10,14 +10,16 @@
       aria-label="Toggle navigation"
     >
       <span class="navbar-toggler-icon"></span>
-    </button>
-    <img class="pt-2" src="../assets/img/Looter.png" alt="" srcset="" style="width: 3em;">
-    <div class="collapse navbar-collapse" id="navbarText">
+    </button> -->
+    <div>
+      <img src="../assets/img/HeistLogo.svg" class="logo-primary img-fluid">
+    </div>
+    <!-- <div class="collapse navbar-collapse" id="navbarText">
       <span class="navbar-text d-flex justify-content-end fixed-top p-3">
         <button class="btn btn-outline-dark rounded-pill" @click="login" v-if="!user.isAuthenticated">Login</button>
         <div class="dropdown" v-else>
           <div class="btn btn-outline-secondary rounded-pill dropdown-toggle w-100" @click="state.dropOpen = !state.dropOpen">
-            <img :src="user.picture" alt="user photo" height="40" class="rounded-circle" />
+            <img src="../assets/img/HeistLogo.svg" class="logo-primary img-fluid">
             <span class="mx-1"></span>
           </div>
           <div
@@ -29,7 +31,7 @@
           </div>
         </div>
       </span>
-    </div>
+    </div> -->
   </nav>
 </template>
 
@@ -61,7 +63,7 @@ export default {
 <style scoped>
 
 .navbar{
-position: absolute  ;
+position: fixed  ;
 z-index: 0;
 }
 .dropdown-menu {
@@ -93,4 +95,5 @@ a:hover {
   padding-right: 2em;
   margin-bottom: 0em;
 }
+
 </style>

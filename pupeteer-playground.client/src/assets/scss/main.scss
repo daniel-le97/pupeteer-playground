@@ -20,3 +20,16 @@ main {
   display: flex;
   align-items: stretch;
 }
+
+.logo-danger{
+  filter: invert(23%) sepia(96%) saturate(1586%) hue-rotate(317deg) brightness(87%) contrast(91%);
+  height: 3.5em;
+}
+
+.logo-primary{
+  filter: invert(50%) sepia(14%) saturate(1236%) hue-rotate(193deg) brightness(95%) contrast(87%);
+  height: 3.5em;
+}
+
+
+
